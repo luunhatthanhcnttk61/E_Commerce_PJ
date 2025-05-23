@@ -15,10 +15,21 @@ class UserController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
+        $this->middleware('admin')->except(['index']);
     }
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->userService->paginate();
+        $keyword = $request->input('keyword');
+        $perpage = $request->input('perpage', 10); // mặc định 10 nếu không có giá trị
+
+        $query = User::query();
+        
+        if(!empty($keyword)) {
+            $query->where('name', 'like', '%' . trim($keyword) . '%');
+        }
+
+        $users = $query->paginate($perpage);
+        //$users = $this->userService->paginate();
 
         /*phân trang cho user */
         // $users = User::paginate(3);
@@ -30,6 +41,7 @@ class UserController extends Controller
             'config',
             'users',
         ));
+
     }
 
     private function config(){
@@ -88,6 +100,7 @@ class UserController extends Controller
         if(!$user){
             return redirect()->back()->with('error', 'Không tìm thấy người dùng');
         }
+
         $config = $this->config();
         $template = 'backend.user.editUser';
         return view ('backend.dashboard.layout', compact(

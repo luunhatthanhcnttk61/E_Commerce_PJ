@@ -11,6 +11,7 @@
                 <div class="ibox-content">
                     <form action="{{ route('user.updateUser', $user->id) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="form-group">
                             <label>Họ và tên</label>
                             <input type="text" name="name" value="{{ old('name', $user->name) }}" 
@@ -50,6 +51,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        <a href="{{ route('user.index') }}" class="btn btn-default">Quay lại</a>
                     </form>
                 </div>
             </div>

@@ -30,15 +30,17 @@
                     {{ $user->status == 1? 'checked' : '' }} />
                 </td>
                 <td class="text-center">
-                    <a href="{{ route('user.editUser', $user->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                    <form action="{{ route('user.deleteUser', $user->id) }}" method="POST" style="display: inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger" 
-                                onclick="return confirm('Bạn có chắc muốn xóa thành viên này?')">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </form>
+                    @if(Auth::user()->role === 'admin')
+                        <a href="{{ route('user.editUser', $user->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                        <form action="{{ route('user.deleteUser', $user->id) }}" method="POST" style="display: inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" 
+                                    onclick="return confirm('Bạn có chắc muốn xóa thành viên này?')">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
+                    @endif
                 </td>
             </tr>
             @endforeach
