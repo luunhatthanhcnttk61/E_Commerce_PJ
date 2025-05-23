@@ -24,11 +24,21 @@
                 <td>{{ $user->phone }}</td>
                 <td>{{ $user->address }}</td>
                 <td class="text-center">
-                    <input type="checkbox" class="js-switch" checked />
+                    <input type="checkbox" 
+                    class="js-switch" 
+                    data-id="{{ $user->id }}"
+                    {{ $user->status == 1? 'checked' : '' }} />
                 </td>
                 <td class="text-center">
-                    <a href="" class="btn btn-succcess"><i class="fa fa-edit"></i></a>
-                    <a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                    <a href="{{ route('user.editUser', $user->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                    <form action="{{ route('user.deleteUser', $user->id) }}" method="POST" style="display: inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" 
+                                onclick="return confirm('Bạn có chắc muốn xóa thành viên này?')">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </form>
                 </td>
             </tr>
             @endforeach
