@@ -26,6 +26,11 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
+        $this->app->bind(
+            \App\Services\Interfaces\IProductServiceInterface::class,
+            \App\Services\ProductService::class
+        );
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

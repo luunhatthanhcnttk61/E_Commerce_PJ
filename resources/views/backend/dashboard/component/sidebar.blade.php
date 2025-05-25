@@ -21,11 +21,10 @@
                 </div>
             </li>
             <li class="active">
-                <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">QL Thành Viên</span> <span class="fa arrow"></span></a>
+                <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">Danh Mục Quản Lý</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li><a href="index.html">QL Nhóm Thành Viên</a></li>
-                    <li><a href="{{ route('user.index') }}">QL Thành Viên</a></li>
-                    
+                    <li><a href="{{ route('user.index') }}">Quản Lý Thành Viên</a></li>
+                    <li><a href="{{ route('product.index') }}">Quản Lý Sản Phẩm</a></li> 
                 </ul>
             </li>
             

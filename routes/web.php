@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\backend\AuthController;
 use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\backend\DashboardController;
+use App\Http\Controllers\backend\ProductController;
 use App\Http\Middleware\AuthenticateMiddleware;
 
 /*
@@ -58,3 +59,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 // Route không yêu cầu quyền admin
 Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware('auth');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    // Product routes
+    Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+    Route::get('/product/create', [ProductController::class, 'createProduct'])->name('product.create');
+    Route::post('/product/store', [ProductController::class, 'storeProduct'])->name('product.store');
+    Route::get('/product/edit/{id}', [ProductController::class, 'editProduct'])->name('product.edit');
+    Route::put('/product/update/{id}', [ProductController::class, 'updateProduct'])->name('product.update');
+    Route::delete('/product/delete/{id}', [ProductController::class, 'deleteProduct'])->name('product.delete');
+    Route::post('/product/update-status', [ProductController::class, 'updateStatus'])->name('product.updateStatus');
+});
