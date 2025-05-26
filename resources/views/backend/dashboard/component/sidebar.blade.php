@@ -25,6 +25,8 @@
                 <ul class="nav nav-second-level">
                     <li><a href="{{ route('user.index') }}">Quản Lý Thành Viên</a></li>
                     <li><a href="{{ route('product.index') }}">Quản Lý Sản Phẩm</a></li> 
+                    <li><a href="{{ route('order.index') }}">Quản Lý Đơn Hàng</a></li>
+                    <li><a href="{{ route('customer.index') }}">Quản Lý Khách Hàng</a></li>
                 </ul>
             </li>
             

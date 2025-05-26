@@ -56,6 +56,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    <a href ="{{ route('product.index') }}" class="btn btn-default">Quay lại</a>
                 </form>
             </div>
         </div>

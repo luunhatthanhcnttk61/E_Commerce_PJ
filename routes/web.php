@@ -5,6 +5,8 @@ use App\Http\Controllers\backend\AuthController;
 use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\ProductController;
+use App\Http\Controllers\backend\OrderController;
+use App\Http\Controllers\backend\CustomerController;
 use App\Http\Middleware\AuthenticateMiddleware;
 
 /*
@@ -60,7 +62,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 // Route không yêu cầu quyền admin
 Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware('auth');
 
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Product routes
     Route::get('/product', [ProductController::class, 'index'])->name('product.index');
     Route::get('/product/create', [ProductController::class, 'createProduct'])->name('product.create');
@@ -69,4 +71,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/product/update/{id}', [ProductController::class, 'updateProduct'])->name('product.update');
     Route::delete('/product/delete/{id}', [ProductController::class, 'deleteProduct'])->name('product.delete');
     Route::post('/product/update-status', [ProductController::class, 'updateStatus'])->name('product.updateStatus');
+
+    // Order routes
+    Route::get('/order', [OrderController::class, 'index'])->name('order.index');
+    Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
+    Route::put('/order/{id}/status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
+    Route::put('/order/{id}/tracking', [OrderController::class, 'updateTracking'])->name('order.updateTracking');
+
+    // Customer routes
+    Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
+    Route::get('/customer/{id}', [CustomerController::class, 'show'])->name('customer.show');
+    Route::post('/customer/update-status', [CustomerController::class, 'updateStatus'])->name('customer.updateStatus');
 });

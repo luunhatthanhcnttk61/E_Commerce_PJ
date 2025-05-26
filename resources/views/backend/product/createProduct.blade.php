@@ -50,6 +50,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Thêm mới</button>
+                    <a href="{{ route('product.index') }}" class="btn btn-default">Quay lại</a>
                 </form>
             </div>
         </div>
