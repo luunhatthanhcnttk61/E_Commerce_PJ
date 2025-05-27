@@ -16,26 +16,26 @@ class ProductService implements ProductServiceInterface
 
     public function paginate()
     {
-        return $this->productRepository->getAllPaginate();  // Sửa thành getAllPaginate()
+        return $this->productRepository->getAllPaginate();
     }
 
     public function createProduct($data)
     {
-        return $this->productRepository->createProduct($data);  // Sửa thành createProduct()
+        return $this->productRepository->createProduct($data);  
     }
 
     public function findById($id)
     {
-        return $this->productRepository->findById($id);  // Sửa thành findById()
+        return $this->productRepository->findById($id);
     }
 
     public function updateProduct($id, $data)
     {
-        return $this->productRepository->updateProduct($id, $data);  // Sửa thành updateProduct()
+        return $this->productRepository->updateProduct($id, $data); 
     }
 
     public function deleteProduct($id)
     {
-        return $this->productRepository->deleteProduct($id);  // Sửa thành deleteProduct()
+        return $this->productRepository->deleteProduct($id); 
     }
 }
