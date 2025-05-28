@@ -7,6 +7,7 @@ use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\OrderController;
 use App\Http\Controllers\backend\CustomerController;
+use App\Http\Controllers\backend\CategoryController;
 use App\Http\Middleware\AuthenticateMiddleware;
 
 /*
@@ -82,4 +83,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
     Route::get('/customer/{id}', [CustomerController::class, 'show'])->name('customer.show');
     Route::post('/customer/update-status', [CustomerController::class, 'updateStatus'])->name('customer.updateStatus');
+
+    // Category routes 
+    Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
+    Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
+    Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
+    Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::put('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
+    Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+    Route::post('/category/update-status', [CategoryController::class, 'updateStatus'])->name('category.updateStatus');
 });

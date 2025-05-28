@@ -15,6 +15,10 @@ use App\Repositories\CustomerRepository;
 use App\Repositories\Interfaces\CustomerRepositoryInterface;
 use App\Services\CustomerService;
 use App\Services\Interfaces\CustomerServiceInterface;
+use App\Repositories\CategoryRepository;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Services\CategoryService;
+use App\Services\Interfaces\CategoryServiceInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -31,6 +35,10 @@ class RepositoryServiceProvider extends ServiceProvider
         //Customer bindings
         $this->app->bind(CustomerServiceInterface::class, CustomerService::class);
         $this->app->bind(CustomerRepositoryInterface::class, CustomerRepository::class);
+
+        //Category bindings
+        $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
+        $this->app->bind(CategoryServiceInterface::class, CategoryService::class);
     }
 
     public function boot()
