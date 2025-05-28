@@ -28,6 +28,9 @@
                     <li><a href="{{ route('category.index') }}">Quản Lý Danh Mục</a></li>
                     <li><a href="{{ route('order.index') }}">Quản Lý Đơn Hàng</a></li>
                     <li><a href="{{ route('customer.index') }}">Quản Lý Khách Hàng</a></li>
+                    <li><a href="{{ route('review.index') }}">Quản Lý Đánh Giá</a></li>
+                    <li><a href="{{ route('contact.index') }}">Quản Lý Liên Hệ</a></li>
+                    <li><a href="{{ route('setting.index') }}">Cài Đặt Hệ Thống</a></li>
                 </ul>
             </li>
             

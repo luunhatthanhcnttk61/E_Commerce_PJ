@@ -19,6 +19,18 @@ use App\Repositories\CategoryRepository;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Services\CategoryService;
 use App\Services\Interfaces\CategoryServiceInterface;
+use App\Repositories\ReviewRepository;
+use App\Repositories\Interfaces\ReviewRepositoryInterface;
+use App\Services\ReviewService;
+use App\Services\Interfaces\ReviewServiceInterface;
+use App\Repositories\ContactRepository;
+use App\Repositories\Interfaces\ContactRepositoryInterface;
+use App\Services\ContactService;
+use App\Services\Interfaces\ContactServiceInterface;
+use App\Repositories\SettingRepository;
+use App\Repositories\Interfaces\SettingRepositoryInterface;
+use App\Services\SettingService;
+use App\Services\Interfaces\SettingServiceInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -39,6 +51,18 @@ class RepositoryServiceProvider extends ServiceProvider
         //Category bindings
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(CategoryServiceInterface::class, CategoryService::class);
+
+        //Review bindings
+        $this->app->bind(ReviewRepositoryInterface::class, ReviewRepository::class);
+        $this->app->bind(ReviewServiceInterface::class, ReviewService::class);
+
+        //Contact bindings
+        $this->app->bind(ContactRepositoryInterface::class, ContactRepository::class);
+        $this->app->bind(ContactServiceInterface::class, ContactService::class);
+
+        //Setting bindings
+        $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
+        $this->app->bind(SettingServiceInterface::class, SettingService::class);
     }
 
     public function boot()

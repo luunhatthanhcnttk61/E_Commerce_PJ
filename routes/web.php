@@ -8,6 +8,9 @@ use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\OrderController;
 use App\Http\Controllers\backend\CustomerController;
 use App\Http\Controllers\backend\CategoryController;
+use App\Http\Controllers\backend\ReviewController;
+use App\Http\Controllers\backend\ContactController;
+use App\Http\Controllers\backend\SettingController;
 use App\Http\Middleware\AuthenticateMiddleware;
 
 /*
@@ -92,4 +95,17 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
     Route::post('/category/update-status', [CategoryController::class, 'updateStatus'])->name('category.updateStatus');
+
+    //Review routes
+    Route::get('/review', [ReviewController::class, 'index'])->name('review.index');
+    Route::post('/review/update-status', [ReviewController::class, 'updateStatus'])->name('review.updateStatus');
+
+    // Contact routes 
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+    Route::post('/contact/update-status', [ContactController::class, 'updateStatus'])->name('contact.updateStatus');
+    Route::delete('/contact/{id}', [ContactController::class, 'destroy'])->name('contact.destroy');
+
+    // Setting routes
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index'); 
+    Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
 });

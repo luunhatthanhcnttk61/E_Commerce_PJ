@@ -78,10 +78,65 @@
         });
     }
 
+    // Xử lý review
+    HT.review = () => {
+        // Xử lý khi click nút xem chi tiết
+        $('.view-review').click(function() {
+            var review = $(this).data('review');
+            
+            // Cập nhật nội dung modal
+            $('#product-name').text(review.product.name);
+            $('#customer-name').text(review.customer.name);
+            $('#rating').html([...Array(5)].map((_, i) => 
+                `<i class="fa fa-star ${i < review.rating ? 'text-warning' : 'text-muted'}"></i>`
+            ).join(''));
+            $('#comment').text(review.comment);
+            $('#created-at').text(moment(review.created_at).format('DD/MM/YYYY HH:mm'));
+            
+            // Lưu ID đánh giá cho các nút duyệt/từ chối
+            $('.approve-review, .reject-review').data('id', review.id);
+        });
+
+        // Xử lý khi click nút duyệt
+        $('.approve-review').click(function() {
+            updateReviewStatus($(this).data('id'), 'approved');
+        });
+
+        // Xử lý khi click nút từ chối 
+        $('.reject-review').click(function() {
+            updateReviewStatus($(this).data('id'), 'rejected');
+        });
+
+        // Hàm cập nhật trạng thái đánh giá
+        function updateReviewStatus(id, status) {
+            $.ajax({
+                url: '/review/update-status',
+                type: 'POST', 
+                data: {
+                    id: id,
+                    status: status,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if(response.success) {
+                        toastr.success('Cập nhật trạng thái thành công');
+                        location.reload();
+                    } else {
+                        toastr.error('Có lỗi xảy ra');
+                    }
+                },
+                error: function() {
+                    toastr.error('Có lỗi xảy ra');
+                }
+            });
+        }
+    }
+
     // Initialize khi document ready
     $document.ready(function(){
         HT.switchery();
         HT.orderStatus();
         HT.trackingNumber();
+        HT.review();
     });
 })(jQuery);
