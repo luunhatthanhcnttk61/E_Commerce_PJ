@@ -109,3 +109,35 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index'); 
     Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
 });
+// Client Routes
+Route::name('client.')->group(function () {
+     // Cart Routes
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
+    // Checkout Routes
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/failed/{order}', [CheckoutController::class, 'failed'])->name('checkout.failed');
+    Route::get('/checkout/callback', [CheckoutController::class, 'callback'])->name('checkout.callback');
+
+    // Authentication Routes
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Account Routes
+    Route::middleware('auth')->group(function() {
+        Route::get('/account', [AccountController::class, 'index'])->name('account.index');
+        Route::put('/account/update', [AccountController::class, 'update'])->name('account.update');
+        Route::get('/account/orders', [AccountController::class, 'orders'])->name('account.orders');
+        Route::get('/account/addresses', [AccountController::class, 'addresses'])->name('account.addresses');
+        Route::get('/account/password', [AccountController::class, 'password'])->name('account.password');
+        Route::put('/account/password', [AccountController::class, 'updatePassword'])->name('account.password.update');
+    });
+});
