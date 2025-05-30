@@ -7,6 +7,7 @@
             <th>Tên sản phẩm</th>
             <th>Giá</th>
             <th>Tồn kho</th>
+            <th>Nổi bật</th>
             <th>Trạng thái</th>
             <th>Thao tác</th>
         </tr>
@@ -28,19 +29,30 @@
                 <td>
                     <div class="switch">
                         <div class="onoffswitch">
-                            <input type="checkbox" class="onoffswitch-checkbox js-switch" 
+                            <input type="checkbox" class="onoffswitch-checkbox js-featured-switch" 
                                    data-id="{{ $product->id }}" 
-                                   id="product{{ $product->id }}"
-                                   {{ $product->status ? 'checked' : '' }}>
-                            <label class="onoffswitch-label" for="product{{ $product->id }}"></label>
+                                   id="featured{{ $product->id }}"
+                                   {{ $product->featured ? 'checked' : '' }}>
+                            <label class="onoffswitch-label" for="featured{{ $product->id }}"></label>
                         </div>
                     </div>
                 </td>
                 <td>
-                    <a href="{{ route('product.edit', $product->id) }}" class="btn btn-success btn-sm">
+                    <div class="switch">
+                        <div class="onoffswitch">
+                            <input type="checkbox" class="onoffswitch-checkbox js-switch" 
+                                   data-id="{{ $product->id }}" 
+                                   id="status{{ $product->id }}"
+                                   {{ $product->status ? 'checked' : '' }}>
+                            <label class="onoffswitch-label" for="status{{ $product->id }}"></label>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-success btn-sm">
                         <i class="fa fa-edit"></i>
                     </a>
-                    <form action="{{ route('product.delete', $product->id) }}" method="POST" style="display: inline">
+                    <form action="{{ route('admin.product.delete', $product->id) }}" method="POST" style="display: inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm" 
@@ -53,7 +65,7 @@
             @endforeach
         @else
             <tr>
-                <td colspan="8" class="text-center">Không có dữ liệu</td>
+                <td colspan="9" class="text-center">Không có dữ liệu</td>
             </tr>
         @endif
     </tbody>

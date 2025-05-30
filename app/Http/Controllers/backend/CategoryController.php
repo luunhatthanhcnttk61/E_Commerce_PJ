@@ -60,10 +60,10 @@ class CategoryController extends Controller
         $data = $request->all();
         $data['slug'] = Str::slug($request->name);
         
-        $result = $this->categoryService->createCategory($data);
+        $result = $this->categoryService->create($data);
         
         if($result) {
-            return redirect()->route('category.index')->with('success', 'Category created successfully');
+            return redirect()->route('admin.category.index')->with('success', 'Category created successfully');
         }
         return redirect()->back()->with('error', 'Failed to create category')->withInput();
     }
@@ -72,7 +72,7 @@ class CategoryController extends Controller
     {
         $category = $this->categoryService->findById($id);
         if(!$category) {
-            return redirect()->route('category.index')->with('error', 'Category not found');
+            return redirect()->route('admin.category.index')->with('error', 'Category not found');
         }
         
         $parentCategories = $this->categoryService->getAllCategories();
@@ -95,18 +95,18 @@ class CategoryController extends Controller
         $data = $request->all();
         $data['slug'] = Str::slug($request->name);
 
-        $result = $this->categoryService->updateCategory($id, $data);
+        $result = $this->categoryService->update($id, $data);
         
         if($result) {
-            return redirect()->route('category.index')->with('success', 'Category updated successfully');
+            return redirect()->route('admin.category.index')->with('success', 'Category updated successfully');
         }
         return redirect()->back()->with('error', 'Failed to update category')->withInput();
     }
 
-    public function destroy($id)
+    public function delete($id)
     {
-       $this->categoryService->deleteCategory($id);
-    return redirect()->route('category.index')->with('success', 'Category deleted successfully');
+       $this->categoryService->delete($id);
+    return redirect()->route('admin.category.index')->with('success', 'Category deleted successfully');
     }
 
     public function updateStatus(Request $request)
@@ -114,7 +114,7 @@ class CategoryController extends Controller
         $id = $request->input('id');
         $status = $request->input('status');
         
-        $result = $this->categoryService->updateCategory($id, ['status' => $status]);
+        $result = $this->categoryService->update($id, ['status' => $status]);
         
         return response()->json(['success' => $result]);
     }

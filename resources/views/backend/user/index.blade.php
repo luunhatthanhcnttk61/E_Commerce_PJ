@@ -3,7 +3,7 @@
         <h2>{{ config('apps.user.title') }}</h2>
         <ol class="breadcrumb" style="margin-bottom: 10px">
             <li>
-                <a href="{{ route('dashboard.index') }}">Dashboard</a>
+                <a href="{{ route('admin.dashboard.index') }}">Dashboard</a>
             </li>
             <li class="active">
                 <strong>{{ config('apps.user.title') }}</strong>

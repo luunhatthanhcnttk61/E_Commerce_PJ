@@ -1,5 +1,5 @@
 <div class="filter-wrapper">
-    <form action="{{ route('product.index') }}" method="GET">
+    <form action="{{ route('admin.product.index') }}" method="GET">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
             <div class="perpage">
                 <div class="uk-flex uk-flex-middle uk-flex-between">
@@ -23,7 +23,7 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('product.create') }}" class="btn btn-danger">
+                    <a href="{{ route('admin.product.create') }}" class="btn btn-danger">
                         <i class="fa fa-plus mr5"></i>Thêm mới sản phẩm
                     </a>
                 </div>

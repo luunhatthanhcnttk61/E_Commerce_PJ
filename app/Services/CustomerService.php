@@ -31,9 +31,9 @@ class CustomerService implements CustomerServiceInterface
         return $this->customerRepository->getAllPaginate($filter);
     }
 
-    public function createCustomer($data)
+    public function create($data)
     {
-        return $this->customerRepository->createCustomer($data);
+        return $this->customerRepository->create($data);
     }
 
     public function findById($id) 
@@ -41,18 +41,18 @@ class CustomerService implements CustomerServiceInterface
         return $this->customerRepository->findById($id);
     }
 
-    public function updateCustomer($id, $data)
+    public function update($id, $data)
     {
-        return $this->customerRepository->updateCustomer($id, $data);
+        return $this->customerRepository->update($id, $data);
     }
 
     public function updateStatus($id, $status)
     {
-        return $this->customerRepository->updateCustomer($id, ['status' => $status]);
+        return $this->customerRepository->update($id, ['status' => $status]);
     }
 
-    public function deleteCustomer($id)
+    public function delete($id)
     {
-        return $this->customerRepository->deleteCustomer($id);
+        return $this->customerRepository->delete($id);
     }
 }

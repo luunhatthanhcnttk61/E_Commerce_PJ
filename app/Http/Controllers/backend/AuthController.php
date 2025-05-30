@@ -11,67 +11,82 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-
+        $this->middleware('guest')->except('logout');
     }
 
-    public function index()
+    public function showLoginForm()
     {
-        if(Auth::id() > 0){
-            return redirect()->route('dashboard.index');
+        if (Auth::check() && Auth::user()->canAccessDashboard()) {
+            return redirect()->route('admin.dashboard.index');
         }
-
         return view('backend.auth.login');
     }
 
-    public function register()
+    public function showRegistrationForm()
     {
-        if(Auth::id() > 0){
-            return redirect()->route('dashboard.index');
+        if (Auth::check() && Auth::user()->canAccessDashboard()) {
+            return redirect()->route('admin.dashboard.index');
         }
-
         return view('backend.auth.register');
     }
 
     public function login(Request $request)
     {
         $data = $request->validate([
-            'email' => ['required',
-                        'string',
-                        'email',
-                        'max:255',
-                        'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i'
-                    ],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i'
+            ],
             'password' => 'required|string|min:8',
+        ], [
             'email.regex' => 'Email phải có định dạng @gmail.com',
+            'email.required' => 'Vui lòng nhập email',
+            'password.required' => 'Vui lòng nhập mật khẩu',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự'
         ]);
+
         $user = User::where('email', $data['email'])->first();
+
         if (!$user) {
-            return redirect()->back()
-            ->withInput($request->only('email'))
-            ->withErrors(['email' => 'Email này chưa được đăng ký!']);
+            return back()
+                ->withInput($request->only('email'))
+                ->withErrors(['email' => 'Email này chưa được đăng ký!']);
         }
+
+        if (!$user->canAccessDashboard()) {
+            return back()
+                ->withInput($request->only('email'))
+                ->withErrors(['email' => 'Tài khoản không có quyền truy cập!']);
+        }
+
         if (Auth::attempt($data)) {
-            return redirect()->route('dashboard.index')->with('success', 'Đăng nhập thành công!');
-        } else {
-            return redirect()->back()
+            $request->session()->regenerate();
+            return redirect()->route('admin.dashboard.index')
+                        ->with('success', 'Đăng nhập thành công!');
+        }
+
+        return back()
             ->withInput($request->only('email'))
             ->withErrors(['password' => 'Mật khẩu không chính xác!']);
-        }
     }
 
-    public function storeRegister(Request $request)
+    public function register(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => ['required',
-                        'string',
-                        'email',
-                        'max:255',
-                        'unique:users',
-                        'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i'
-                    ],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:users',
+                'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i'
+            ],
             'password' => 'required|string|min:8',
-
+        ], [
             'name.required' => 'Vui lòng nhập họ tên',
             'email.required' => 'Vui lòng nhập email',
             'email.email' => 'Email không đúng định dạng',
@@ -79,35 +94,32 @@ class AuthController extends Controller
             'email.regex' => 'Email phải có định dạng @gmail.com',
             'password.required' => 'Vui lòng nhập mật khẩu',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự'
-            
         ]);
 
-        if(!$request->input('checkbox')) {
-            return redirect()->back()
+        if (!$request->input('checkbox')) {
+            return back()
                 ->withInput()
                 ->withErrors(['checkbox' => 'Vui lòng đồng ý với điều khoản sử dụng']);
         }
 
-        // if($request->input('checkbox')){
-            User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => bcrypt($data['password']),
-                
-            ]);
-            return redirect()->route('auth.index')
-        ->with('success', 'Đăng ký tài khoản thành công. Vui lòng đăng nhập.');
+        User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role' => User::ROLE_USER // Set default role as staff
+        ]);
 
+        return redirect()->route('admin.auth.login')
+            ->with('success', 'Đăng ký tài khoản thành công. Vui lòng đăng nhập.');
     }
-
 
     public function logout(Request $request)
     {
-        //auth()->logout();
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('auth.index')->with('success', 'Đăng xuất thành công!');
-        //return view('backend.auth.login');
+        
+        return redirect()->route('admin.auth.login')
+                ->with('success', 'Đăng xuất thành công!');
     }
 }

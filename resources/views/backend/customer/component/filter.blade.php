@@ -1,5 +1,5 @@
 <div class="filter-wrapper">
-    <form action="{{ route('customer.index') }}" method="GET">
+    <form action="{{ route('admin.customer.index') }}" method="GET">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
             <div class="perpage">
                 <select name="customer_type" class="form-control">

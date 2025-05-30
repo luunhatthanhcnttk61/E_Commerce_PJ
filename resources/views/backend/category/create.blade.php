@@ -5,7 +5,7 @@
                 <h5>Thêm mới danh mục</h5>
             </div>
             <div class="ibox-content">
-                <form action="{{ route('category.store') }}" method="POST">
+                <form action="{{ route('admin.category.store') }}" method="POST">
                     @csrf
                     <div class="form-group">
                         <label>Tên danh mục</label>
@@ -52,7 +52,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Thêm mới</button>
-                    <a href="{{ route('category.index') }}" class="btn btn-default">Quay lại</a>
+                    <a href="{{ route('admin.category.index') }}" class="btn btn-default">Quay lại</a>
                 </form>
             </div>
         </div>

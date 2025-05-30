@@ -1,5 +1,5 @@
 <div class="filter-wrapper">
-    <form action="{{ route('user.index') }}" method="GET">
+    <form action="{{ route('admin.user.index') }}" method="GET">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
             <div class="perpage">
                 <div class="uk-flex uk-flex-middle uk-flex-between">
@@ -28,7 +28,7 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('user.createUser') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i>Thêm mới thành viên</a>
+                    <a href="{{ route('admin.user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i>Thêm mới thành viên</a>
                 </div>
             </div>
         </div>

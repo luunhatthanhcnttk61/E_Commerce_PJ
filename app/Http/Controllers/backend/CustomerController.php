@@ -32,7 +32,7 @@ class CustomerController extends Controller
     {
         $customer = $this->customerService->findById($id);
         if(!$customer) {
-            return redirect()->route('customer.index')->with('error', 'Không tìm thấy khách hàng');
+            return redirect()->route('admin.customer.index')->with('error', 'Không tìm thấy khách hàng');
         }
 
         $config = $this->config();

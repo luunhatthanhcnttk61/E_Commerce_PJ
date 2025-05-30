@@ -34,12 +34,12 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $this->model->where('status', 'active')->get();
     }
 
-    public function createCategory($data)
+    public function create($data)
     {
         return $this->model->create($data);
     }
 
-    public function updateCategory($id, array $data)
+    public function update($id, array $data)
     {
         $category = $this->findById($id);
         if ($category) {
@@ -48,7 +48,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         return false;
     }
 
-    public function deleteCategory($id)
+    public function delete($id)
     {
         $category = $this->findById($id);
         if ($category) {

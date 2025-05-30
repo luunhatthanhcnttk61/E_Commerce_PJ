@@ -31,8 +31,8 @@
                 </td>
                 <td class="text-center">
                     @if(Auth::user()->role === 'admin')
-                        <a href="{{ route('user.editUser', $user->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                        <form action="{{ route('user.deleteUser', $user->id) }}" method="POST" style="display: inline">
+                        <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                        <form action="{{ route('admin.user.delete', $user->id) }}" method="POST" style="display: inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger" 

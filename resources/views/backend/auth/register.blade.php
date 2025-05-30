@@ -28,7 +28,7 @@
             </div>
             <h3>Register to IN+</h3>
             <p>Create account to see it in action.</p>
-            <form class="m-t" role="form" action="{{ route('auth.register.post') }}" method="POST">
+            <form class="m-t" role="form" action="{{ route('admin.auth.register.post') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Name" value="{{ old('name') }}" name="name" required>
@@ -58,7 +58,7 @@
                 <button type="submit" class="btn btn-primary block full-width m-b">Register</button>
 
                 <p class="text-muted text-center"><small>Already have an account?</small></p>
-                <a class="btn btn-sm btn-white btn-block" href= {{ route('auth.index') }}>Login</a>
+                <a class="btn btn-sm btn-white btn-block" href= {{ route('admin.auth.index') }}>Login</a>
             </form>
         </div>
     </div>

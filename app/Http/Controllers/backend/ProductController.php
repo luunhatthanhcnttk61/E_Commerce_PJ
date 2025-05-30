@@ -41,14 +41,14 @@ class ProductController extends Controller
         ];
     }
 
-    public function createProduct()
+    public function create()
     {
         $config = $this->config();
-        $template = 'backend.product.createProduct';
+        $template = 'backend.product.create';
         return view('backend.dashboard.layout', compact('template', 'config'));
     }
 
-    public function storeProduct(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -67,27 +67,27 @@ class ProductController extends Controller
             $data['image'] = 'uploads/products/' . $filename;
         }
 
-        $result = $this->productService->createProduct($data);
+        $result = $this->productService->create($data);
 
         if($result) {
-            return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
+            return redirect()->route('admin.product.index')->with('success', 'Thêm sản phẩm thành công');
         }
         return redirect()->back()->with('error', 'Thêm sản phẩm thất bại')->withInput();
     }
 
-    public function editProduct($id)
+    public function edit($id)
     {
         $product = $this->productService->findById($id);
         if(!$product) {
-            return redirect()->route('product.index')->with('error', 'Không tìm thấy sản phẩm');
+            return redirect()->route('admin.product.index')->with('error', 'Không tìm thấy sản phẩm');
         }
 
         $config = $this->config();
-        $template = 'backend.product.editProduct';
+        $template = 'backend.product.edit';
         return view('backend.dashboard.layout', compact('template', 'config', 'product'));
     }
 
-    public function updateProduct(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -105,20 +105,20 @@ class ProductController extends Controller
             $data['image'] = 'uploads/products/' . $filename;
         }
 
-        $result = $this->productService->updateProduct($id, $data);
+        $result = $this->productService->update($id, $data);
 
         if($result) {
-            return redirect()->route('product.index')->with('success', 'Cập nhật sản phẩm thành công');
+            return redirect()->route('admin.product.index')->with('success', 'Cập nhật sản phẩm thành công');
         }
         return redirect()->back()->with('error', 'Cập nhật sản phẩm thất bại')->withInput();
     }
 
-    public function deleteProduct($id)
+    public function delete($id)
     {
-        $result = $this->productService->deleteProduct($id);
+        $result = $this->productService->delete($id);
         
         if($result) {
-            return redirect()->route('product.index')->with('success', 'Xóa sản phẩm thành công');
+            return redirect()->route('admin.product.index')->with('success', 'Xóa sản phẩm thành công');
         }
         return redirect()->back()->with('error', 'Xóa sản phẩm thất bại');
     }
@@ -128,7 +128,7 @@ class ProductController extends Controller
         $id = $request->input('id');
         $status = $request->input('status');
         
-        $result = $this->productService->updateProduct($id, ['status' => $status]);
+        $result = $this->productService->update($id, ['status' => $status]);
         
         return response()->json(['success' => $result]);
     }

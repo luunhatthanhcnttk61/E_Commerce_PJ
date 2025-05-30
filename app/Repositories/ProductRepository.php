@@ -18,12 +18,12 @@ class ProductRepository implements ProductRepositoryInterface
         return $this->model->paginate(10);
     }
 
-    public function createProduct($data)
+    public function create($data)
     {
         return $this->model->create($data);
     }
 
-    public function updateProduct($id, array $data)
+    public function update($id, array $data)
     {
         $product = $this->findById($id);
         if ($product) {
@@ -32,7 +32,7 @@ class ProductRepository implements ProductRepositoryInterface
         return false;
     }
 
-    public function deleteProduct($id)
+    public function delete($id)
     {
         $product = $this->findById($id);
         if ($product) {
@@ -45,4 +45,61 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return $this->model->find($id);
     }
+
+    public function getFeaturedProducts()
+    {
+        return $this->model
+            ->where('featured', 1)
+            ->where('status', 1)
+            ->latest()
+            ->take(8)
+            ->get();
+    }
+
+    public function getNewProducts()
+    {
+        return $this->model
+            ->where('status', 1)
+            ->latest()
+            ->take(8)
+            ->get();
+    }
+
+    public function getProductsByCategory($categoryId)
+    {
+        return $this->model
+            ->where('category_id', $categoryId)
+            ->where('status', 1)
+            ->paginate(12);
+    }
+
+    public function search($keyword)
+    {
+        return $this->model
+            ->where('name', 'like', "%{$keyword}%")
+            ->orWhere('description', 'like', "%{$keyword}%")
+            ->where('status', 1)
+            ->paginate(12);
+    }
+
+    public function getRelatedProducts($productId, $limit = 4)
+    {
+        $product = $this->findById($productId);
+        
+        return $this->model
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $productId)
+            ->where('status', 1)
+            ->inRandomOrder()
+            ->take($limit)
+            ->get();
+    }
+
+    public function getAllActive()
+{
+    return $this->model
+        ->where('status', 1)
+        ->latest()
+        ->paginate(12);
+}
 }

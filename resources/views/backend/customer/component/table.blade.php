@@ -40,7 +40,7 @@
                 </div>
             </td>
             <td>
-                <a href="{{ route('customer.show', $customer->id) }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('admin.customer.show', $customer->id) }}" class="btn btn-primary btn-sm">
                     <i class="fa fa-eye"></i> Chi tiết
                 </a>
             </td>

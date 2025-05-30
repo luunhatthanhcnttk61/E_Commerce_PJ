@@ -19,9 +19,9 @@ class ProductService implements ProductServiceInterface
         return $this->productRepository->getAllPaginate();
     }
 
-    public function createProduct($data)
+    public function create($data)
     {
-        return $this->productRepository->createProduct($data);  
+        return $this->productRepository->create($data);  
     }
 
     public function findById($id)
@@ -29,13 +29,43 @@ class ProductService implements ProductServiceInterface
         return $this->productRepository->findById($id);
     }
 
-    public function updateProduct($id, $data)
+    public function update($id, $data)
     {
-        return $this->productRepository->updateProduct($id, $data); 
+        return $this->productRepository->update($id, $data); 
     }
 
-    public function deleteProduct($id)
+    public function delete($id)
     {
-        return $this->productRepository->deleteProduct($id); 
+        return $this->productRepository->delete($id); 
     }
+
+    public function getFeaturedProducts()
+    {
+        return $this->productRepository->getFeaturedProducts();
+    }
+
+    public function getNewProducts()
+    {
+        return $this->productRepository->getNewProducts();
+    }
+
+    public function getProductsByCategory($categoryId)
+    {
+        return $this->productRepository->getProductsByCategory($categoryId);
+    }
+
+    public function search($keyword)
+    {
+        return $this->productRepository->search($keyword);
+    }
+
+    public function getRelatedProducts($productId, $limit = 4)
+    {
+        return $this->productRepository->getRelatedProducts($productId, $limit);
+    }
+
+    public function getAllProducts()
+{
+    return $this->productRepository->getAllActive();
+}
 }

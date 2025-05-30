@@ -31,7 +31,7 @@
                 <!--Continually expanded and constantly improved Inspinia Admin Them (IN+)-->
             </p>
             <p>Login in. To see it in action.</p>
-            <form action="{{ route('auth.login')}}" method="POST">
+            <form action="{{ route('admin.auth.login.post')}}" method="POST">
                 @csrf
                 <div class="form-group">
                     <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Username" value="{{ old('email') }}" required="" >
@@ -49,7 +49,7 @@
 
                 <a href="#"><small>Forgot password?</small></a>
                 <p class="text-muted text-center"><small>Do not have an account?</small></p>
-                <a class="btn btn-sm btn-white btn-block" href="{{ route('auth.register') }}">Create an account</a>
+                <a class="btn btn-sm btn-white btn-block" href="{{ route('admin.auth.register') }}">Create an account</a>
             </form>
             <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
         </div>

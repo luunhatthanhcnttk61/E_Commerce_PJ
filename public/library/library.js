@@ -132,11 +132,39 @@
         }
     }
 
+    HT.featuredStatus = () => {
+        $('.js-featured-switch').change(function() {
+            let id = $(this).data('id');
+            let featured = $(this).prop('checked') ? 1 : 0;
+
+            $.ajax({
+                url: '/admin/product/update-featured',
+                type: 'POST',
+                data: {
+                    id: id,
+                    featured: featured,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if(response.success) {
+                        toastr.success('Cập nhật trạng thái nổi bật thành công');
+                    } else {
+                        toastr.error('Có lỗi xảy ra');
+                    }
+                },
+                error: function() {
+                    toastr.error('Có lỗi xảy ra');
+                }
+            });
+        });
+    }
+
     // Initialize khi document ready
     $document.ready(function(){
         HT.switchery();
         HT.orderStatus();
         HT.trackingNumber();
         HT.review();
+        HT.featuredStatus();
     });
 })(jQuery);

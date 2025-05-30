@@ -31,9 +31,9 @@ class CategoryService implements CategoryServiceInterface
         return $this->categoryRepository->getAll();
     }
 
-    public function createCategory($data)
+    public function create($data)
     {
-        return $this->categoryRepository->createCategory($data);
+        return $this->categoryRepository->create($data);
     }
 
     public function findById($id)
@@ -41,13 +41,13 @@ class CategoryService implements CategoryServiceInterface
         return $this->categoryRepository->findById($id);
     }
 
-    public function updateCategory($id, $data)
+    public function update($id, $data)
     {
-        return $this->categoryRepository->updateCategory($id, $data);
+        return $this->categoryRepository->update($id, $data);
     }
 
-    public function deleteCategory($id)
+    public function delete($id)
     {
-        return $this->categoryRepository->deleteCategory($id);
+        return $this->categoryRepository->delete($id);
     }
 }

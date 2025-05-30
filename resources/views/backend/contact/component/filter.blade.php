@@ -1,6 +1,6 @@
 <div class="row mb-3">
     <div class="col-lg-12">
-        <form action="{{ route('contact.index') }}" method="GET">
+        <form action="{{ route('admin.contact.index') }}" method="GET">
             <div class="row">
                 <div class="col-md-3 mb-3">
                     <input type="text" name="keyword" class="form-control" 

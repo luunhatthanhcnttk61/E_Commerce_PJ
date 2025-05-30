@@ -4,7 +4,7 @@
             <div class="ibox-title">
                 <h5>Chi tiết đơn hàng #{{ $order->order_code }}</h5>
                 <div class="ibox-tools">
-                    <a href="{{ route('order.index') }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('admin.order.index') }}" class="btn btn-primary btn-sm">
                         <i class="fa fa-arrow-left"></i> Quay lại
                     </a>
                 </div>

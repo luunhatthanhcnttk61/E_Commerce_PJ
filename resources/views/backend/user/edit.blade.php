@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Thêm thành viên mới</h2>
+        <h2>Cập nhật thành viên</h2>
     </div>
 </div>
 
@@ -9,11 +9,12 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <form action="{{ route('user.storeUser') }}" method="POST">
+                    <form action="{{ route('admin.user.update', $user->id) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="form-group">
                             <label>Họ và tên</label>
-                            <input type="text" name="name" value="{{ old('name') }}" 
+                            <input type="text" name="name" value="{{ old('name', $user->name) }}" 
                                    class="form-control @error('name') is-invalid @enderror">
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
@@ -22,7 +23,7 @@
 
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" name="email" value="{{ old('email') }}" 
+                            <input type="email" name="email" value="{{ old('email', $user->email) }}" 
                                    class="form-control @error('email') is-invalid @enderror">
                             @error('email')
                                 <span class="text-danger">{{ $message }}</span>
@@ -30,7 +31,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Mật khẩu</label>
+                            <label>Mật khẩu (để trống nếu không đổi)</label>
                             <input type="password" name="password" 
                                    class="form-control @error('password') is-invalid @enderror">
                             @error('password')
@@ -40,17 +41,17 @@
 
                         <div class="form-group">
                             <label>Số điện thoại</label>
-                            <input type="text" name="phone" value="{{ old('phone') }}" 
+                            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" 
                                    class="form-control">
                         </div>
 
                         <div class="form-group">
                             <label>Địa chỉ</label>
-                            <textarea name="address" class="form-control">{{ old('address') }}</textarea>
+                            <textarea name="address" class="form-control">{{ old('address', $user->address) }}</textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Thêm mới</button>
-                        <a href="{{ route('user.index') }}" class="btn btn-default">Quay lại</a>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        <a href="{{ route('admin.user.index') }}" class="btn btn-default">Quay lại</a>
                     </form>
                 </div>
             </div>

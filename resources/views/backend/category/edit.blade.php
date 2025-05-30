@@ -5,7 +5,7 @@
                 <h5>Cập nhật danh mục</h5>
             </div>
             <div class="ibox-content">
-                <form action="{{ route('category.update', $category->id) }}" method="POST">
+                <form action="{{ route('admin.category.update', $category->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
@@ -60,7 +60,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
-                    <a href="{{ route('category.index') }}" class="btn btn-default">Quay lại</a>
+                    <a href="{{ route('admin.category.index') }}" class="btn btn-default">Quay lại</a>
                 </form>
             </div>
         </div>

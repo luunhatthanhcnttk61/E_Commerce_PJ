@@ -32,12 +32,12 @@ class CustomerRepository implements CustomerRepositoryInterface
         return $query->paginate(10);
     }
 
-    public function createCustomer($data)
+    public function create($data)
     {
         return $this->model->create($data);
     }
 
-    public function updateCustomer($id, array $data)
+    public function update($id, array $data)
     {
         $customer = $this->findById($id);
         if ($customer) {
@@ -46,7 +46,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         return false;
     }
 
-    public function deleteCustomer($id)
+    public function delete($id)
     {
         $customer = $this->findById($id);
         if ($customer) {

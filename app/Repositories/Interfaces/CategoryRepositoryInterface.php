@@ -6,8 +6,8 @@ interface CategoryRepositoryInterface
 {
     public function getAllPaginate($filter = []);
     public function getAll();
-    public function createCategory($data);
-    public function updateCategory($id, array $data);
-    public function deleteCategory($id);
+    public function create($data);
+    public function update($id, array $data);
+    public function delete($id);
     public function findById($id);
 }

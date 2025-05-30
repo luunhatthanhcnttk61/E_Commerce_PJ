@@ -6,8 +6,8 @@ interface CustomerServiceInterface
 {
     public function getCustomers($request); 
     public function paginate();
-    public function createCustomer($data);
+    public function create($data);
     public function findById($id);
-    public function updateCustomer($id, $data);
-    public function deleteCustomer($id);
+    public function update($id, $data);
+    public function delete($id);
 }

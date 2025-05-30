@@ -17,10 +17,17 @@ class UserController extends Controller
         $this->userService = $userService;
         $this->middleware('admin')->except(['index']);
     }
+
     public function index(Request $request)
     {
+         // Kiểm tra quyền xem danh sách
+        if (!auth()->user()->canViewUsers()) {
+            return redirect()->route('admin.dashboard.index')
+                           ->with('error', 'Bạn không có quyền truy cập');
+        }
+
         $keyword = $request->input('keyword');
-        $perpage = $request->input('perpage', 10); // mặc định 10 nếu không có giá trị
+        $perpage = $request->input('perpage', 10);
 
         $query = User::query();
         
@@ -28,15 +35,16 @@ class UserController extends Controller
             $query->where('name', 'like', '%' . trim($keyword) . '%');
         }
 
-        $users = $query->paginate($perpage);
-        //$users = $this->userService->paginate();
+        // Nếu là admin thì xem được tất cả, không phải admin thì chỉ xem được user thường
+        if (!auth()->user()->isAdmin()) {
+            $query->where('role', 'client');
+        }
 
-        /*phân trang cho user */
-        // $users = User::paginate(3);
+        $users = $query->paginate($perpage);
 
         $config = $this->config();
         $template = 'backend.user.index';
-        return view ('backend.dashboard.layout', compact(
+        return view('backend.dashboard.layout', compact(
             'template',
             'config',
             'users',
@@ -54,16 +62,21 @@ class UserController extends Controller
             ]
         ];
     }
-    public function createUser()
+    public function create()
     {
+        if (!auth()->user()->canManageUsers()) {
+            return redirect()->route('admin.user.index')
+                        ->with('error', 'Bạn không có quyền thêm thành viên');
+        }
+
         $config = $this->config();
-        $template = 'backend.user.createUser';
-        return view ('backend.dashboard.layout', compact(
+        $template = 'backend.user.create';
+        return view('backend.dashboard.layout', compact(
             'template',
             'config',
         ));
     }
-    public function storeUser(Request $request)
+    public function store(Request $request)
     {
         $request->validate(['name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
@@ -79,7 +92,7 @@ class UserController extends Controller
         'password.min' => 'Mật khẩu tối thiểu 8 ký tự',
     ]);
     //tạo user
-    $user = $this->userService->createUser([
+    $user = $this->userService->create([
         'name' => $request->name,
         'email' => $request->email,
         'password' => bcrypt($request->password),
@@ -89,12 +102,13 @@ class UserController extends Controller
     ]);
     //kiểm tra user có được tạo thành công hay không
     if ($user) {
-        return redirect()->route('user.index')->with('success', 'Thêm thành viên thành công');
-        } else {
+        return redirect()->route('admin.user.index')
+                       ->with('success', 'Thêm thành viên thành công');
+    } else {
         return redirect()->back()->with('error', 'Thêm thành viên thất bại')->withInput();
         }
     }
-    public function editUser($id)
+    public function edit($id)
     {
         $user = $this->userService->findById($id);
         if(!$user){
@@ -102,14 +116,14 @@ class UserController extends Controller
         }
 
         $config = $this->config();
-        $template = 'backend.user.editUser';
+        $template = 'backend.user.edit';
         return view ('backend.dashboard.layout', compact(
             'template',
             'config',
             'user',
         ));
     }
-    public function updateUser(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
         'name' => 'required|string|max:255',
@@ -123,27 +137,40 @@ class UserController extends Controller
         $data['password'] = bcrypt($request->password);
     }
 
-    $result = $this->userService->updateUser($id, $data);
+    $result = $this->userService->update($id, $data);
     if($result){
-        return redirect()->route('user.index')->with('success', 'Cập nhật thành viên thành công');
+        return redirect()->route('admin.user.index')
+                       ->with('success', 'Cập nhật thành viên thành công');
     }
 
     return rediract()->back()->with('error', 'Cập nhật thành viên thất bại')->withInput();
     }
-    public function deleteUser($id)
+
+    public function delete($id)
     {
-        $result = $this->userService->deleteUser($id);
+        $result = $this->userService->delete($id);
         if($result){
-            return redirect()->route('user.index')->with('success', 'Xóa thành viên thành công');
+            return redirect()->route('admin.user.index')->with('success', 'Xóa thành viên thành công');
         }
         return redirect()->back()->with('error', 'Xóa thành viên thất bại');
     }
 
     public function updateStatus(Request $request)
 {
-    $result = $this->userService->updateUser($request->user_id, [
-        'status' => $request->status
-    ]);
+    if (!auth()->user()->canManageUsers()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn không có quyền thực hiện thao tác này'
+            ]);
+        }
+
+        $result = $this->userService->update($request->user_id, [
+            'status' => $request->status
+        ]);
+
+        return response()->json([
+            'success' => $result
+        ]);
 
     return response()->json([
         'success' => $result

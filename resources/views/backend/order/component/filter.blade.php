@@ -1,5 +1,5 @@
 <div class="filter-wrapper">
-    <form action="{{ route('order.index') }}" method="GET">
+    <form action="{{ route('admin.order.index') }}" method="GET">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
             <div class="perpage">
                 <select name="status" class="form-control">

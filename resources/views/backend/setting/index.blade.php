@@ -1,3 +1,17 @@
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>{{ config('apps.setting.title') }}</h2>
+        <ol class="breadcrumb" style="margin-bottom: 10px">
+            <li>
+                <a href="{{ route('admin.dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="active">
+                <strong>{{ config('apps.setting.title') }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
@@ -5,7 +19,7 @@
                 <h5>Cài đặt hệ thống</h5>
             </div>
             <div class="ibox-content">
-                <form action="{{ route('setting.update') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.setting.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">

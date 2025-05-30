@@ -59,11 +59,11 @@
         @foreach($new_products as $product)
         <div class="col-md-3">
             <div class="product-card">
-                <a href="{{ route('client.product.show', $product->slug) }}">
+                <a href="{{ route('client.product.show', $product->id) }}">
                     <img src="{{ $product->image }}" alt="{{ $product->name }}">
                 </a>
                 <div class="product-info">
-                    <h3><a href="{{ route('client.product.show', $product->slug) }}">{{ $product->name }}</a></h3>
+                    <h3><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h3>
                     <p class="price">{{ number_format($product->price) }}đ</p>
                     @if($product->old_price)
                         <p class="old-price">{{ number_format($product->old_price) }}đ</p>

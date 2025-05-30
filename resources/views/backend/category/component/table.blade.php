@@ -32,10 +32,10 @@
                     </div>
                 </td>
                 <td>
-                    <a href="{{ route('category.edit', $category->id) }}" class="btn btn-xs btn-primary">
+                    <a href="{{ route('admin.category.edit', $category->id) }}" class="btn btn-xs btn-primary">
                         <i class="fa fa-edit"></i>
                     </a>
-                    <form action="{{ route('category.destroy', $category->id) }}" method="POST" style="display: inline">
+                    <form action="{{ route('admin.category.delete', $category->id) }}" method="POST" style="display: inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">

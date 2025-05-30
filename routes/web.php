@@ -1,143 +1,186 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\backend\AuthController;
-use App\Http\Controllers\backend\UserController;
-use App\Http\Controllers\backend\DashboardController;
-use App\Http\Controllers\backend\ProductController;
-use App\Http\Controllers\backend\OrderController;
-use App\Http\Controllers\backend\CustomerController;
-use App\Http\Controllers\backend\CategoryController;
-use App\Http\Controllers\backend\ReviewController;
-use App\Http\Controllers\backend\ContactController;
-use App\Http\Controllers\backend\SettingController;
-use App\Http\Middleware\AuthenticateMiddleware;
+use App\Http\Controllers\Backend\{
+    AuthController as AdminAuth,
+    DashboardController,
+    UserController,
+    ProductController as BackendProductController,
+    OrderController,
+    CustomerController,
+    CategoryController,
+    ReviewController,
+    ContactController,
+    SettingController
+};
+use App\Http\Controllers\Frontend\{
+    AuthController as ClientAuth,
+    HomeController,
+    CartController,
+    CheckoutController,
+    AccountController,
+    FrontendProductController,
+    FrontendCategoryController,
+    FrontendReviewController,
+    FrontendContactController
+};
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+// Admin Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Admin Auth Routes (No Auth Required)
+    Route::middleware('guest')->group(function () {
+        Route::get('/', [AdminAuth::class, 'showLoginForm'])->name('auth.login');
+        Route::post('/login', [AdminAuth::class, 'login'])->name('auth.login.post');
+        Route::get('/register', [AdminAuth::class, 'showRegistrationForm'])->name('auth.register');
+        Route::post('/register', [AdminAuth::class, 'register'])->name('auth.register.post');
+    });
+    
+    // Admin Protected Routes
+    Route::middleware('auth')->group(function () {
+        Route::get('/logout', [AdminAuth::class, 'logout'])->name('auth.logout');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+        // Admin Only Routes
+        Route::middleware(['admin'])->group(function () {
+            // User Management
+            Route::prefix('user')->name('user.')->group(function() {
+                Route::get('/', [UserController::class, 'index'])->name('index');
+                Route::get('/create', [UserController::class, 'create'])->name('create');
+                Route::post('/store', [UserController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [UserController::class, 'update'])->name('update');
+                Route::delete('/{id}', [UserController::class, 'delete'])->name('delete');
+                Route::post('/update-status', [UserController::class, 'updateStatus'])->name('updateStatus');
+            });
+        });
 
+        // Products Management
+        Route::prefix('product')->name('product.')->group(function() {
+            Route::get('/', [BackendProductController::class, 'index'])->name('index');
+            Route::get('/create', [BackendProductController::class, 'create'])->name('create');
+            Route::post('/store', [BackendProductController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [BackendProductController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [BackendProductController::class, 'update'])->name('update');
+            Route::delete('/{id}', [BackendProductController::class, 'delete'])->name('delete');
+            Route::post('/update-status', [BackendProductController::class, 'updateStatus'])->name('updateStatus');
+            Route::post('/update-featured', [BackendProductController::class, 'updateFeatured'])->name('updateFeatured');
+        });
 
-Route::get('/admin', [AuthController::class, 'index'])->name('auth.index');
-Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+        // Categories Management
+        Route::prefix('category')->name('category.')->group(function() {
+            Route::get('/', [CategoryController::class, 'index'])->name('index');
+            Route::get('/create', [CategoryController::class, 'create'])->name('create');
+            Route::post('/store', [CategoryController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [CategoryController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [CategoryController::class, 'update'])->name('update');
+            Route::delete('/{id}', [CategoryController::class, 'delete'])->name('delete');
+            Route::post('/update-status', [CategoryController::class, 'updateStatus'])->name('updateStatus');
+        });
 
+        // Orders Management
+        Route::prefix('order')->name('order.')->group(function() {
+            Route::get('/', [OrderController::class, 'index'])->name('index');
+            Route::get('/{id}', [OrderController::class, 'show'])->name('show');
+            Route::put('/{id}/status', [OrderController::class, 'updateStatus'])->name('updateStatus');
+            Route::put('/{id}/tracking', [OrderController::class, 'updateTracking'])->name('updateTracking');
+        });
 
-Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
-Route::post('/register', [AuthController::class, 'storeRegister'])->name('auth.register.post');
+        // Customers Management
+        Route::prefix('customer')->name('customer.')->group(function() {
+            Route::get('/', [CustomerController::class, 'index'])->name('index');
+            Route::get('/{id}', [CustomerController::class, 'show'])->name('show');
+            Route::post('/update-status', [CustomerController::class, 'updateStatus'])->name('updateStatus');
+        });
 
-Route::get('/dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index')->middleware(AuthenticateMiddleware::class);
+        // Reviews Management
+        Route::prefix('review')->name('review.')->group(function() {
+            Route::get('/', [ReviewController::class, 'index'])->name('index');
+            Route::get('/{id}', [ReviewController::class, 'show'])->name('show');
+            Route::post('/update-status', [ReviewController::class, 'updateStatus'])->name('updateStatus');
+        });
 
-/* User */ 
-// Route::get('/user/index', [UserController::class, 'index'])->name('user.index')->middleware(AuthenticateMiddleware::class);
+        // Contact Management
+        Route::prefix('contact')->name('contact.')->group(function() {
+            Route::get('/', [ContactController::class, 'index'])->name('index');
+            Route::get('/{id}', [ContactController::class, 'show'])->name('show');
+            Route::post('/update-status', [ContactController::class, 'updateStatus'])->name('updateStatus');
+        });
 
-// Route::get('/user/create', [UserController::class, 'createUser'])->name('user.createUser')->middleware(AuthenticateMiddleware::class);
-// Route::post('/user/store', [UserController::class, 'storeUser'])->name('user.storeUser')->middleware(AuthenticateMiddleware::class);
-// Route::middleware(['auth'])->group(function(){
-//     Route::get('/user/edit/{id}', [UserController::class, 'editUser'])->name('user.editUser');
-//     Route::post('/user/update/{id}', [UserController::class, 'updateUser'])->name('user.updateUser');
-//     Route::delete('/user/delete/{id}', [UserController::class, 'deleteUser'])->name('user.deleteUser');
-// });
-
-// Route::post('/user/update-status', [UserController::class, 'updateStatus'])
-//     ->name('user.updateStatus')
-//     ->middleware('auth');
-
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/user/create', [UserController::class, 'createUser'])->name('user.createUser');
-    Route::post('/user/store', [UserController::class, 'storeUser'])->name('user.storeUser');
-    Route::get('/user/edit/{id}', [UserController::class, 'editUser'])->name('user.editUser');
-    Route::put('/user/update/{id}', [UserController::class, 'updateUser'])->name('user.updateUser');
-    Route::delete('/user/delete/{id}', [UserController::class, 'deleteUser'])->name('user.deleteUser');
-    Route::post('/user/update-status', [UserController::class, 'updateStatus'])->name('user.updateStatus');
-});
-
-// Route không yêu cầu quyền admin
-Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware('auth');
-
-Route::middleware(['auth'])->group(function () {
-    // Product routes
-    Route::get('/product', [ProductController::class, 'index'])->name('product.index');
-    Route::get('/product/create', [ProductController::class, 'createProduct'])->name('product.create');
-    Route::post('/product/store', [ProductController::class, 'storeProduct'])->name('product.store');
-    Route::get('/product/edit/{id}', [ProductController::class, 'editProduct'])->name('product.edit');
-    Route::put('/product/update/{id}', [ProductController::class, 'updateProduct'])->name('product.update');
-    Route::delete('/product/delete/{id}', [ProductController::class, 'deleteProduct'])->name('product.delete');
-    Route::post('/product/update-status', [ProductController::class, 'updateStatus'])->name('product.updateStatus');
-
-    // Order routes
-    Route::get('/order', [OrderController::class, 'index'])->name('order.index');
-    Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
-    Route::put('/order/{id}/status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
-    Route::put('/order/{id}/tracking', [OrderController::class, 'updateTracking'])->name('order.updateTracking');
-
-    // Customer routes
-    Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
-    Route::get('/customer/{id}', [CustomerController::class, 'show'])->name('customer.show');
-    Route::post('/customer/update-status', [CustomerController::class, 'updateStatus'])->name('customer.updateStatus');
-
-    // Category routes 
-    Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
-    Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
-    Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
-    Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
-    Route::put('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
-    Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
-    Route::post('/category/update-status', [CategoryController::class, 'updateStatus'])->name('category.updateStatus');
-
-    //Review routes
-    Route::get('/review', [ReviewController::class, 'index'])->name('review.index');
-    Route::post('/review/update-status', [ReviewController::class, 'updateStatus'])->name('review.updateStatus');
-
-    // Contact routes 
-    Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
-    Route::post('/contact/update-status', [ContactController::class, 'updateStatus'])->name('contact.updateStatus');
-    Route::delete('/contact/{id}', [ContactController::class, 'destroy'])->name('contact.destroy');
-
-    // Setting routes
-    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index'); 
-    Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
-});
-// Client Routes
-Route::name('client.')->group(function () {
-     // Cart Routes
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-
-    // Checkout Routes
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
-    Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
-    Route::get('/checkout/failed/{order}', [CheckoutController::class, 'failed'])->name('checkout.failed');
-    Route::get('/checkout/callback', [CheckoutController::class, 'callback'])->name('checkout.callback');
-
-    // Authentication Routes
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-    // Account Routes
-    Route::middleware('auth')->group(function() {
-        Route::get('/account', [AccountController::class, 'index'])->name('account.index');
-        Route::put('/account/update', [AccountController::class, 'update'])->name('account.update');
-        Route::get('/account/orders', [AccountController::class, 'orders'])->name('account.orders');
-        Route::get('/account/addresses', [AccountController::class, 'addresses'])->name('account.addresses');
-        Route::get('/account/password', [AccountController::class, 'password'])->name('account.password');
-        Route::put('/account/password', [AccountController::class, 'updatePassword'])->name('account.password.update');
+        // Settings
+        Route::prefix('setting')->name('setting.')->group(function() {
+            Route::get('/', [SettingController::class, 'index'])->name('index');
+            Route::post('/update', [SettingController::class, 'update'])->name('update');
+        });
     });
 });
+
+// Client/Frontend Routes
+Route::name('client.')->group(function () {
+    // Public Routes
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    
+    // Auth Routes
+    Route::prefix('auth')->name('auth.')->group(function() {
+        Route::get('/login', [ClientAuth::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [ClientAuth::class, 'login'])->name('login.post');
+        Route::get('/register', [ClientAuth::class, 'showRegistrationForm'])->name('register');
+        Route::post('/register', [ClientAuth::class, 'register'])->name('register.post');
+        Route::post('/logout', [ClientAuth::class, 'logout'])->name('logout');
+    });
+
+    // Product Routes (Public)
+    Route::prefix('product')->name('product.')->group(function() {
+        Route::get('/', [FrontendProductController::class, 'index'])->name('index');
+        Route::get('/category/{category_id}', [FrontendProductController::class, 'byCategory'])->name('byCategory');
+        Route::get('/{id}', [FrontendProductController::class, 'show'])->name('show');
+    });
+
+    // Cart Routes (Public)
+    Route::prefix('cart')->name('cart.')->group(function() {
+        Route::get('/', [CartController::class, 'index'])->name('index');
+        Route::post('/add', [CartController::class, 'add'])->name('add');
+        Route::post('/update', [CartController::class, 'update'])->name('update');
+        Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
+    });
+
+    // Category Routes
+    Route::prefix('category')->name('category.')->group(function() {
+        Route::get('/{slug}', [CategoryController::class, 'show'])->name('show');
+    });
+
+    // Review Routes
+    Route::prefix('review')->name('review.')->middleware('auth')->group(function() {
+        Route::post('/store', [ReviewController::class, 'store'])->name('store');
+    });
+
+    // Contact Routes
+    Route::prefix('contact')->name('contact.')->group(function() {
+        Route::get('/', [ContactController::class, 'index'])->name('index');
+        Route::post('/store', [ContactController::class, 'store'])->name('store');
+    });
+
+    // Protected Client Routes
+    Route::middleware('auth')->group(function() {
+        // Checkout Routes
+        Route::prefix('checkout')->name('checkout.')->group(function() {
+            Route::get('/', [CheckoutController::class, 'index'])->name('index');
+            Route::post('/process', [CheckoutController::class, 'process'])->name('process');
+            Route::get('/success/{order}', [CheckoutController::class, 'success'])->name('success');
+            Route::get('/failed/{order}', [CheckoutController::class, 'failed'])->name('failed');
+            Route::get('/callback', [CheckoutController::class, 'callback'])->name('callback');
+        });
+
+        // Account Routes
+        Route::prefix('account')->name('account.')->group(function() {
+            Route::get('/', [AccountController::class, 'index'])->name('index');
+            Route::put('/update', [AccountController::class, 'update'])->name('update');
+            Route::get('/orders', [AccountController::class, 'orders'])->name('orders');
+            Route::get('/addresses', [AccountController::class, 'addresses'])->name('addresses');
+            Route::get('/password', [AccountController::class, 'password'])->name('password');
+            Route::put('/password/update', [AccountController::class, 'updatePassword'])->name('password.update');
+        });
+
+        
+    });
+});
+

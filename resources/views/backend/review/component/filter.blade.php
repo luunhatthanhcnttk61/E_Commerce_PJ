@@ -1,6 +1,6 @@
 <div class="row mb-3">
     <div class="col-lg-12">
-        <form action="{{ route('review.index') }}" method="GET">
+        <form action="{{ route('admin.review.index') }}" method="GET">
             <div class="row">
                 <!-- Tìm kiếm theo từ khóa -->
                 <div class="col-md-3 mb-3">

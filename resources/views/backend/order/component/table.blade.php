@@ -33,7 +33,7 @@
                        placeholder="Nhập mã vận đơn">
             </td>
             <td>
-                <a href="{{ route('order.show', $order->id) }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('admin.order.show', $order->id) }}" class="btn btn-primary btn-sm">
                     <i class="fa fa-eye"></i> Chi tiết
                 </a>
             </td>

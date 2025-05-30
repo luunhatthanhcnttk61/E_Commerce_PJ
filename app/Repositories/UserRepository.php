@@ -50,12 +50,12 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->paginate(3);
     }
 
-    public function createUser($data)
+    public function create($data)
     {
         return $this->model->create($data);
     }
 
-    public function updateUser($id, array $data)
+    public function update($id, array $data)
     {
         $user = $this->findById($id);
         if($user) {
@@ -64,7 +64,7 @@ class UserRepository implements UserRepositoryInterface
         return false;
     }
 
-    public function deleteUser($id)
+    public function delete($id)
     {
         $user = $this->findById($id);
         if($user) {
