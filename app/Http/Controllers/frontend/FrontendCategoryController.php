@@ -31,4 +31,9 @@ class FrontendCategoryController extends Controller
         
         return view('frontend.category.show', compact('category', 'products', 'categories'));
     }
+
+    public function findBySlug($slug)
+    {
+        return Category::where('slug', $slug)->where('status', 'active')->first();
+    }
 }

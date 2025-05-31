@@ -18,7 +18,7 @@ class AccountController extends Controller
 
     public function index()
     {
-        return view('frontend.account.index');
+        return view('frontend.home.account');
     }
 
     public function update(Request $request)

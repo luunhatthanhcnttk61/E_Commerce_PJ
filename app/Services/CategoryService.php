@@ -50,4 +50,9 @@ class CategoryService implements CategoryServiceInterface
     {
         return $this->categoryRepository->delete($id);
     }
+
+    public function findBySlug($slug)
+    {
+        return $this->categoryRepository->findBySlug($slug);
+    }
 }

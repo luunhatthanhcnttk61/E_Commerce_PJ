@@ -589,3 +589,135 @@ body {
 .fade-in {
     animation: fadeIn 0.5s ease-in;
 }
+
+/* Product Card Styles */
+.product-card {
+    border: 1px solid #eee;
+    padding: 15px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.product-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.product-card .product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.product-card .product-title {
+    font-size: 1rem;
+    margin: 15px 0 10px;
+}
+
+.product-card .product-title a {
+    color: #333;
+    text-decoration: none;
+}
+
+.product-card .product-price {
+    margin-bottom: 10px;
+}
+
+.product-card .current-price {
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.product-card .old-price {
+    color: #6c757d;
+    text-decoration: line-through;
+    margin-left: 8px;
+    font-size: 0.9rem;
+}
+
+/* Category Sidebar Styles */
+.category-sidebar {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.sidebar-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #007bff;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-item {
+    margin-bottom: 8px;
+}
+
+.category-link {
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+}
+
+.category-link:hover {
+    color: #007bff;
+}
+
+.category-item.active > .category-link {
+    color: #007bff;
+    font-weight: 600;
+}
+
+.product-count {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.subcategory-list {
+    list-style: none;
+    padding-left: 15px;
+    margin-top: 5px;
+}
+
+.price-filter .form-control {
+    font-size: 0.9rem;
+}
+
+/* Contact Page Styles */
+.contact-info h5 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.contact-info i {
+    width: 25px;
+    color: var(--primary-color);
+}
+
+.contact-form label {
+    font-weight: 500;
+}
+
+.contact-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.contact-info p {
+    margin-bottom: 0.5rem;
+    padding-left: 25px;
+}

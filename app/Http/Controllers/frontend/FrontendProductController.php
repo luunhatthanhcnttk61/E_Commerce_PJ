@@ -36,7 +36,7 @@ class FrontendProductController extends Controller
 
         $relatedProducts = $this->productService->getRelatedProducts($id);
         
-        return view('frontend.product.show', compact('product', 'relatedProducts'));
+        return view('frontend.product.detail', compact('product', 'relatedProducts'));
     }
 
     public function byCategory($category_id)

@@ -131,7 +131,7 @@ Route::name('client.')->group(function () {
     // Product Routes (Public)
     Route::prefix('product')->name('product.')->group(function() {
         Route::get('/', [FrontendProductController::class, 'index'])->name('index');
-        Route::get('/category/{category_id}', [FrontendProductController::class, 'byCategory'])->name('byCategory');
+        //Route::get('/category/{category_id}', [FrontendProductController::class, 'byCategory'])->name('byCategory');
         Route::get('/{id}', [FrontendProductController::class, 'show'])->name('show');
     });
 
@@ -145,18 +145,18 @@ Route::name('client.')->group(function () {
 
     // Category Routes
     Route::prefix('category')->name('category.')->group(function() {
-        Route::get('/{slug}', [CategoryController::class, 'show'])->name('show');
+        Route::get('/{slug}', [FrontendCategoryController::class, 'show'])->name('show');
     });
 
     // Review Routes
     Route::prefix('review')->name('review.')->middleware('auth')->group(function() {
-        Route::post('/store', [ReviewController::class, 'store'])->name('store');
+        Route::post('/store', [FrontendReviewController::class, 'store'])->name('store');
     });
 
     // Contact Routes
     Route::prefix('contact')->name('contact.')->group(function() {
-        Route::get('/', [ContactController::class, 'index'])->name('index');
-        Route::post('/store', [ContactController::class, 'store'])->name('store');
+        Route::get('/', [FrontendContactController::class, 'index'])->name('index');
+        Route::post('/store', [FrontendContactController::class, 'store'])->name('store');
     });
 
     // Protected Client Routes
