@@ -123,13 +123,53 @@ class ProductController extends Controller
         return redirect()->back()->with('error', 'Xóa sản phẩm thất bại');
     }
 
+    // public function updateStatus(Request $request)
+    // {
+    //     $id = $request->input('id');
+    //     $status = $request->input('status');
+        
+    //     $result = $this->productService->update($id, ['status' => $status]);
+        
+    //     return response()->json(['success' => $result]);
+    // }
+
     public function updateStatus(Request $request)
     {
-        $id = $request->input('id');
-        $status = $request->input('status');
-        
-        $result = $this->productService->update($id, ['status' => $status]);
-        
-        return response()->json(['success' => $result]);
+        try {
+            $id = $request->input('id');
+            $status = $request->input('status');
+            
+            $result = $this->productService->update($id, ['status' => $status]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật trạng thái thành công'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra'
+            ], 500);
+        }
+    }
+
+    public function updateFeatured(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            $featured = $request->input('featured');
+            
+            $result = $this->productService->update($id, ['featured' => $featured]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật nổi bật thành công'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra'
+            ], 500);
+        }
     }
 }

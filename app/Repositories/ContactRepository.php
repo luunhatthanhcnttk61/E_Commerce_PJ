@@ -55,4 +55,64 @@ class ContactRepository implements ContactRepositoryInterface
         }
         return false;
     }
+
+    public function create(array $data)
+    {
+        return $this->model->create($data);
+    }
+    public function sendReply($contact, $replyContent)
+    {
+        try {
+            // Gửi email
+            Mail::to($contact->email)
+                ->cc(config('mail.from.address'))
+                ->queue(new ContactReplyMail($contact, $replyContent));
+
+            // Ghi log
+            Log::info('Đã gửi mail trả lời', [
+                'contact_id' => $contact->id,
+                'email' => $contact->email,
+                'subject' => $contact->subject
+            ]);
+
+            // Cập nhật trạng thái
+            return $this->updateStatus($contact->id, 'replied');
+
+        } catch (\Exception $e) {
+            Log::error('Lỗi gửi mail trả lời', [
+                'contact_id' => $contact->id,
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
+        }
+    }
+
+    public function updateStatus($id, $status)
+    {
+        try {
+            $contact = $this->findById($id);
+            if (!$contact) {
+                return false;
+            }
+
+            $result = $contact->update(['status' => $status]);
+
+            if ($result) {
+                Log::info('Đã cập nhật trạng thái liên hệ', [
+                    'contact_id' => $id,
+                    'old_status' => $contact->getOriginal('status'),
+                    'new_status' => $status
+                ]);
+            }
+
+            return $result;
+
+        } catch (\Exception $e) {
+            Log::error('Lỗi cập nhật trạng thái liên hệ', [
+                'contact_id' => $id,
+                'error' => $e->getMessage()
+            ]);
+            return false;
+        }
+    }
 }

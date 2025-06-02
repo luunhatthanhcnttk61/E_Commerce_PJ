@@ -1,3 +1,6 @@
+@php
+use App\Models\Contact;
+@endphp
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
@@ -22,18 +25,19 @@
                 <td>{{ $contact->subject }}</td>
                 <td>
                     <select class="form-control contact-status" data-id="{{ $contact->id }}">
-                        <option value="new" {{ $contact->status == 'new' ? 'selected' : '' }}>Mới</option>
-                        <option value="read" {{ $contact->status == 'read' ? 'selected' : '' }}>Đã đọc</option>
-                        <option value="replied" {{ $contact->status == 'replied' ? 'selected' : '' }}>Đã trả lời</option>
+                        @foreach(Contact::$statuses as $value => $label)
+                            <option value="{{ $value }}" {{ $contact->status === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
                 </td>
                 <td>{{ $contact->created_at->format('d/m/Y H:i') }}</td>
                 <td>
-                    <button type="button" class="btn btn-xs btn-primary view-contact" 
-                            data-toggle="modal" data-target="#contactModal" 
-                            data-contact="{{ $contact->toJson() }}">
-                        <i class="fa fa-eye"></i>
-                    </button>
+                    <a href="{{ route('admin.contact.show', $contact->id) }}" 
+                    class="btn btn-sm btn-primary">
+                        <i class="fas fa-eye"></i>
+                    </a>
                 </td>
             </tr>
             @endforeach
@@ -41,5 +45,3 @@
     </table>
     {{ $contacts->links() }}
 </div>
-
-@include('backend.contact.component.modal')

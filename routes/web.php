@@ -103,7 +103,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('contact')->name('contact.')->group(function() {
             Route::get('/', [ContactController::class, 'index'])->name('index');
             Route::get('/{id}', [ContactController::class, 'show'])->name('show');
-            Route::post('/update-status', [ContactController::class, 'updateStatus'])->name('updateStatus');
+            Route::post('/update-status/{id}', [ContactController::class, 'updateStatus'])->name('updateStatus');
+            Route::post('/{id}/reply', [ContactController::class, 'reply'])->name('reply');
         });
 
         // Settings

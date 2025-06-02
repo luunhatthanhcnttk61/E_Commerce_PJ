@@ -159,6 +159,61 @@
         });
     }
 
+    HT.contact = function() {
+    // Xử lý thay đổi trạng thái
+    $(document).on('change', '.contact-status', function() {
+        var select = $(this);
+        var id = select.data('id');
+        var status = select.val();
+        
+        $.ajax({
+            url: '/admin/contact/update-status',
+            method: 'POST',
+            data: {
+                id: id,
+                status: status,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.success) {
+                    toastr.success('Cập nhật trạng thái thành công');
+                }
+            },
+            error: function(xhr) {
+                toastr.error('Có lỗi xảy ra khi cập nhật trạng thái');
+                // Khôi phục giá trị cũ nếu có lỗi
+                select.val(select.find('option[selected]').val());
+            }
+        });
+    });
+
+    // Handle reply form submission
+    $('#replyForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        $.ajax({
+            url: $(this).data('url'),
+            method: 'POST',
+            data: $(this).serialize(),
+            beforeSend: function() {
+                $('#btnSendReply').prop('disabled', true)
+                    .html('<i class="fa fa-spinner fa-spin"></i> Đang gửi...');
+            },
+            success: function(response) {
+                toastr.success(response.message);
+                setTimeout(function() {
+                    location.reload();
+                }, 1500);
+            },
+            error: function(xhr) {
+                toastr.error(xhr.responseJSON.error || 'Có lỗi xảy ra');
+                $('#btnSendReply').prop('disabled', false)
+                    .html('<i class="fa fa-paper-plane"></i> Gửi trả lời');
+            }
+        });
+    });
+};
+
     // Initialize khi document ready
     $document.ready(function(){
         HT.switchery();
@@ -166,5 +221,6 @@
         HT.trackingNumber();
         HT.review();
         HT.featuredStatus();
+        HT.contact();
     });
 })(jQuery);

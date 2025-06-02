@@ -31,6 +31,14 @@ use App\Repositories\SettingRepository;
 use App\Repositories\Interfaces\SettingRepositoryInterface;
 use App\Services\SettingService;
 use App\Services\Interfaces\SettingServiceInterface;
+use App\Services\Interfaces\CartServiceInterface;
+use App\Services\CartService;
+use App\Repositories\Interfaces\CartRepositoryInterface;
+use App\Repositories\CartRepository;
+use App\Services\Interfaces\CheckoutServiceInterface;
+use App\Services\CheckoutService;
+use App\Repositories\Interfaces\CheckoutRepositoryInterface;
+use App\Repositories\CheckoutRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -65,8 +73,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SettingServiceInterface::class, SettingService::class);
 
         //Cart bindings
-        $this->app->bind(\App\Services\Interfaces\CartServiceInterface::class, \App\Services\CartService::class);
-        $this->app->bind(\App\Repositories\Interfaces\CartRepositoryInterface::class, \App\Repositories\CartRepository::class);
+        $this->app->bind(CartRepositoryInterface::class, CartRepository::class);
+        $this->app->bind(CartServiceInterface::class, CartService::class);
+
+        //Checkout bindings
+        $this->app->bind(CheckoutRepositoryInterface::class, CheckoutRepository::class);
+        $this->app->bind(CheckoutServiceInterface::class, CheckoutService::class);
     }
 
     public function boot()

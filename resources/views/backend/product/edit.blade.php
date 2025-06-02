@@ -44,7 +44,8 @@
                         <label>Sản phẩm nổi bật</label>
                         <div class="switch">
                             <div class="onoffswitch">
-                                <input type="checkbox" name="featured" class="onoffswitch-checkbox" 
+                                <input type="checkbox" name="featured" class="onoffswitch-checkbox js-switch" 
+                                       {{ old('featured', $product->featured) ? 'checked' : '' }}
                                     id="featured" value="1" {{ $product->featured ? 'checked' : '' }}>
                                 <label class="onoffswitch-label" for="featured"></label>
                             </div>

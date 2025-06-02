@@ -29,11 +29,11 @@
                 <td>
                     <div class="switch">
                         <div class="onoffswitch">
-                            <input type="checkbox" class="onoffswitch-checkbox js-featured-switch" 
+                            <input type="checkbox" class="onoffswitch-checkbox js-switch" 
                                    data-id="{{ $product->id }}" 
                                    id="featured{{ $product->id }}"
                                    {{ $product->featured ? 'checked' : '' }}>
-                            <label class="onoffswitch-label" for="featured{{ $product->id }}"></label>
+                            {{-- <label class="onoffswitch-label" for="featured{{ $product->id }}"></label> --}}
                         </div>
                     </div>
                 </td>
@@ -44,7 +44,7 @@
                                    data-id="{{ $product->id }}" 
                                    id="status{{ $product->id }}"
                                    {{ $product->status ? 'checked' : '' }}>
-                            <label class="onoffswitch-label" for="status{{ $product->id }}"></label>
+                            {{-- <label class="onoffswitch-label" for="status{{ $product->id }}"></label> --}}
                         </div>
                     </div>
                 </td>

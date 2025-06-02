@@ -24,10 +24,10 @@
                                 data-id="{{ $category->id }}"
                                 id="status_{{ $category->id }}" 
                                 {{ $category->status == 'active' ? 'checked' : '' }}>
-                            <label class="onoffswitch-label" for="status_{{ $category->id }}">
+                            {{-- <label class="onoffswitch-label" for="status_{{ $category->id }}">
                                 <span class="onoffswitch-inner"></span>
                                 <span class="onoffswitch-switch"></span>
-                            </label>
+                            </label> --}}
                         </div>
                     </div>
                 </td>

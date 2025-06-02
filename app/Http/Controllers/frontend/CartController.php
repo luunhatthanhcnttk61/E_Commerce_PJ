@@ -4,6 +4,8 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use App\Services\Interfaces\CartServiceInterface;
+use App\Models\Product;
+use Cart; // Assuming you are using the "darryldecode/cart" package or similar
 use Illuminate\Http\Request;
 
 class CartController extends Controller
