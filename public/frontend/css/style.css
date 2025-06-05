@@ -721,3 +721,53 @@ body {
     margin-bottom: 0.5rem;
     padding-left: 25px;
 }
+
+.product-reviews .rating .fas {
+    font-size: 14px;
+}
+
+.product-reviews .review-item {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.rating-select .form-check-inline {
+    margin-right: 15px;
+}
+
+.rating-select .form-check-input:checked ~ label {
+    color: #ffc107;
+}
+
+.product-gallery {
+    margin-bottom: 30px;
+}
+
+.product-gallery .main-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.thumbnail-images {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px 0;
+}
+
+.thumbnail-images .thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.thumbnail-images .thumbnail:hover {
+    border-color: #007bff;
+}

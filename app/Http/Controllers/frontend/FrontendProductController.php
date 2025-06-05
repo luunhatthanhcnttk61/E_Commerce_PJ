@@ -36,6 +36,8 @@ class FrontendProductController extends Controller
 
         $relatedProducts = $this->productService->getRelatedProducts($id);
         
+        $product->load(['category', 'reviews']);
+        
         return view('frontend.product.detail', compact('product', 'relatedProducts'));
     }
 

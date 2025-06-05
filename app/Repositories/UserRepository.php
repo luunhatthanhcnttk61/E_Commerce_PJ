@@ -77,4 +77,12 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->model->find($id);
     }
+    public function updateStatus($userId, $status)
+    {
+        $user = $this->findById($userId);
+        if ($user) {
+            return $user->update(['status' => $status]);
+        }
+        return false;
+    }
 }

@@ -111,11 +111,21 @@ class CategoryController extends Controller
 
     public function updateStatus(Request $request)
     {
+        try {
         $id = $request->input('id');
         $status = $request->input('status');
         
         $result = $this->categoryService->update($id, ['status' => $status]);
         
-        return response()->json(['success' => $result]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Cập nhật trạng thái thành công'
+        ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

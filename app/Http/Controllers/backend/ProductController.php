@@ -5,15 +5,18 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Interfaces\ProductServiceInterface as ProductService;
+use App\Services\Interfaces\CategoryServiceInterface as CategoryService;
 use App\Models\Product;
 
 class ProductController extends Controller
 {
     protected $productService;
+    protected $categoryService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductService $productService, CategoryService $categoryService)
     {
         $this->productService = $productService;
+        $this->categoryService = $categoryService;
     }
 
     public function index(Request $request)
@@ -43,36 +46,52 @@ class ProductController extends Controller
 
     public function create()
     {
+        $categories = $this->categoryService->getAllCategories();
         $config = $this->config();
         $template = 'backend.product.create';
-        return view('backend.dashboard.layout', compact('template', 'config'));
+        return view('backend.dashboard.layout', compact('template', 'config', 'categories'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|unique:products',
-            'price' => 'required|numeric|min:0',
-            'inventory' => 'required|integer|min:0',
-        ]);
+        'name' => 'required|string|max:255',
+        'code' => 'required|string|unique:products',
+        'category_id'=> 'required|exists:categories,id',
+        'price' => 'required|numeric|min:0',
+        'inventory' => 'required|integer|min:0',
+    ]);
 
-        $data = $request->all();
-        $data['status'] = 1;
+    $data = $request->all();
+    $data['status'] = 1;
 
-        if($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '.' . $image->getClientOriginalExtension();
+    // Upload main image
+    if($request->hasFile('image')) {
+        $image = $request->file('image');
+        $filename = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('uploads/products'), $filename);
+        $data['image'] = 'uploads/products/' . $filename;
+    }
+
+    // Create product first
+    $product = $this->productService->create($data);
+
+    // Then upload multiple images if product was created successfully
+    if($product && $request->hasFile('product_images')) {
+        foreach($request->file('product_images') as $image) {
+            $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('uploads/products'), $filename);
-            $data['image'] = 'uploads/products/' . $filename;
+            
+            $product->images()->create([
+                'image' => 'uploads/products/' . $filename
+            ]);
         }
+    }
 
-        $result = $this->productService->create($data);
-
-        if($result) {
-            return redirect()->route('admin.product.index')->with('success', 'Thêm sản phẩm thành công');
-        }
-        return redirect()->back()->with('error', 'Thêm sản phẩm thất bại')->withInput();
+    if($product) {
+        return redirect()->route('admin.product.index')->with('success', 'Thêm sản phẩm thành công');
+    }
+    return redirect()->back()->with('error', 'Thêm sản phẩm thất bại')->withInput();
     }
 
     public function edit($id)
@@ -82,9 +101,10 @@ class ProductController extends Controller
             return redirect()->route('admin.product.index')->with('error', 'Không tìm thấy sản phẩm');
         }
 
+        $categories = $this->categoryService->getAllCategories();
         $config = $this->config();
         $template = 'backend.product.edit';
-        return view('backend.dashboard.layout', compact('template', 'config', 'product'));
+        return view('backend.dashboard.layout', compact('template', 'config', 'product', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -92,6 +112,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'required|string|unique:products,code,'.$id,
+            'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'inventory' => 'required|integer|min:0',
         ]);
@@ -103,6 +124,18 @@ class ProductController extends Controller
             $filename = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('uploads/products'), $filename);
             $data['image'] = 'uploads/products/' . $filename;
+        }
+
+        // Upload multiple images
+        if($request->hasFile('product_images')) {
+            foreach($request->file('product_images') as $image) {
+                $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('uploads/products'), $filename);
+                
+                $product->images()->create([
+                    'image' => 'uploads/products/' . $filename
+                ]);
+            }
         }
 
         $result = $this->productService->update($id, $data);

@@ -32,6 +32,12 @@ use App\Models\Contact;
                         @endforeach
                     </select>
                 </td>
+                {{-- <td>
+                    <span class="badge status-badge {{ $contact->status == 'new' ? 'badge-primary' : 
+                        ($contact->status == 'read' ? 'badge-info' : 'badge-success') }}">
+                        {{ Contact::$statuses[$contact->status] }}
+                    </span>
+                </td> --}}
                 <td>{{ $contact->created_at->format('d/m/Y H:i') }}</td>
                 <td>
                     <a href="{{ route('admin.contact.show', $contact->id) }}" 

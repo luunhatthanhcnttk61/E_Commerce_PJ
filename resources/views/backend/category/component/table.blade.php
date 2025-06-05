@@ -20,14 +20,11 @@
                 <td>
                     <div class="switch">
                         <div class="onoffswitch">
-                            <input type="checkbox" class="onoffswitch-checkbox js-switch" 
+                            <input type="checkbox" class="onoffswitch-checkbox js-switch-category-status" 
+                                {{ $category->status == 'active' ? 'checked' : '' }}
                                 data-id="{{ $category->id }}"
                                 id="status_{{ $category->id }}" 
                                 {{ $category->status == 'active' ? 'checked' : '' }}>
-                            {{-- <label class="onoffswitch-label" for="status_{{ $category->id }}">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label> --}}
                         </div>
                     </div>
                 </td>

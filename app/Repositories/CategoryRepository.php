@@ -31,7 +31,16 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function getAll()
     {
-        return $this->model->where('status', 'active')->get();
+        // return $this->model->where('status', 'active')->get();
+        return $this->model
+        ->where('status', 'active')
+        ->whereNull('parent_id')
+        ->with(['children' => function($query) {
+            $query->where('status', 'active')
+                 ->withCount('products');
+        }])
+        ->withCount('products')
+        ->get();
     }
 
     public function create($data)

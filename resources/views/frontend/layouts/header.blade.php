@@ -1,14 +1,15 @@
 <header class="site-header">
     <div class="top-header bg-dark text-light py-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <span><i class="fas fa-phone"></i> Hotline: 1900 xxxx</span>
-                    <span class="ml-3"><i class="fas fa-envelope"></i> Email: support@example.com</span>
-                </div>
-                <div class="col-md-6 text-right">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <span><i class="fas fa-phone"></i> Hotline: 1900 xxxx</span>
+                <span class="ml-3"><i class="fas fa-envelope"></i> Email: support@example.com</span>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end">
                     @auth
-                        <a href="{{ route('client.account.index') }}" class="text-light mr-3">
+                        <a href="{{ route('client.account.index') }}" class="text-light me-3">
                             <i class="fas fa-user"></i> Tài khoản
                         </a>
                         <form action="{{ route('client.auth.logout') }}" method="POST" class="d-inline">
@@ -18,7 +19,7 @@
                             </button>
                         </form>
                     @else
-                        <a href="{{ route('client.auth.login') }}" class="text-light mr-3">
+                        <a href="{{ route('client.auth.login') }}" class="text-light me-3">
                             <i class="fas fa-sign-in-alt"></i> Đăng nhập
                         </a>
                         <a href="{{ route('client.auth.register') }}" class="text-light">
@@ -29,6 +30,7 @@
             </div>
         </div>
     </div>
+</div>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">

@@ -3,9 +3,10 @@
     var HT = {};
     var $document = $(document);
 
-    // Xử lý switchery cho user status
+    // Xử lý switchery cho user và product status
     HT.switchery = () => {
-        $('.js-switch').each(function() {
+        // Xử lý user status
+        $('.js-switch-user').each(function() {
             var switchery = new Switchery(this, {color: '#1AB394'});
             
             $(this).on('change', function() {
@@ -13,7 +14,7 @@
                 let userId = $(this).data('id');
                 
                 $.ajax({
-                    url: '/user/update-status',
+                    url: '/admin/user/update-status',
                     type: 'POST',
                     data: {
                         status: status,
@@ -22,16 +23,108 @@
                     },
                     success: function(response) {
                         if(response.success) {
-                            toastr.success('Cập nhật trạng thái thành công');
+                            toastr.success('Cập nhật trạng thái người dùng thành công');
                         } else {
-                            toastr.error('Có lỗi xảy ra');
+                            toastr.error('Có lỗi xảy ra khi cập nhật người dùng');
                         }
+                    },
+                    error: function() {
+                        toastr.error('Có lỗi xảy ra khi cập nhật người dùng');
                     }
                 });
             });
         });
-    }
 
+        // Xử lý product status
+        $('.js-switch-product-status').each(function() {
+            var switchery = new Switchery(this, {color: '#1AB394'});
+            
+            $(this).on('change', function() {
+                let status = $(this).prop('checked') ? 1 : 0;
+                let productId = $(this).data('id');
+                
+                $.ajax({
+                    url: '/admin/product/update-status',
+                    type: 'POST',
+                    data: {
+                        status: status,
+                        id: productId,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if(response.success) {
+                            toastr.success('Cập nhật trạng thái sản phẩm thành công');
+                        } else {
+                            toastr.error('Có lỗi xảy ra khi cập nhật sản phẩm');
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Có lỗi xảy ra khi cập nhật sản phẩm');
+                    }
+                });
+            });
+        });
+
+    // Xử lý product featured
+        $('.js-switch-product-featured').each(function() {
+            var switchery = new Switchery(this, {color: '#1AB394'});
+            
+            $(this).on('change', function() {
+                let featured = $(this).prop('checked') ? 1 : 0;
+                let productId = $(this).data('id');
+                
+                $.ajax({
+                    url: '/admin/product/update-featured',
+                    type: 'POST',
+                    data: {
+                        featured: featured,
+                        id: productId,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if(response.success) {
+                            toastr.success('Cập nhật sản phẩm nổi bật thành công');
+                        } else {
+                            toastr.error('Có lỗi xảy ra khi cập nhật sản phẩm');
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Có lỗi xảy ra khi cập nhật sản phẩm');
+                    }
+                });
+            });
+        });
+        // Thêm xử lý category status
+    $('.js-switch-category-status').each(function() {
+        var switchery = new Switchery(this, {color: '#1AB394'});
+        
+        $(this).on('change', function() {
+            let status = $(this).prop('checked') ? 'active' : 'inactive'; // Chú ý: category dùng string
+            let categoryId = $(this).data('id');
+            
+            $.ajax({
+                url: '/admin/category/update-status',
+                type: 'POST',
+                data: {
+                    status: status,
+                    id: categoryId,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if(response.success) {
+                        toastr.success('Cập nhật trạng thái danh mục thành công');
+                    } else {
+                        toastr.error('Có lỗi xảy ra khi cập nhật danh mục');
+                    }
+                },
+                error: function() {
+                    toastr.error('Có lỗi xảy ra khi cập nhật danh mục');
+                }
+            });
+        });
+    });
+}
+        
     // Xử lý order status
     HT.orderStatus = () => {
         $('.order-status').change(function() {
@@ -132,86 +225,58 @@
         }
     }
 
-    HT.featuredStatus = () => {
-        $('.js-featured-switch').change(function() {
-            let id = $(this).data('id');
-            let featured = $(this).prop('checked') ? 1 : 0;
-
-            $.ajax({
-                url: '/admin/product/update-featured',
-                type: 'POST',
-                data: {
-                    id: id,
-                    featured: featured,
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if(response.success) {
-                        toastr.success('Cập nhật trạng thái nổi bật thành công');
-                    } else {
-                        toastr.error('Có lỗi xảy ra');
-                    }
-                },
-                error: function() {
-                    toastr.error('Có lỗi xảy ra');
-                }
-            });
-        });
-    }
 
     HT.contact = function() {
-    // Xử lý thay đổi trạng thái
-    $(document).on('change', '.contact-status', function() {
-        var select = $(this);
-        var id = select.data('id');
-        var status = select.val();
+    // Xử lý form trả lời
+    $('#replyForm').on('submit', function(e) {
+        e.preventDefault();
+        var form = $(this);
+        var btn = $('#btnSendReply');
         
         $.ajax({
-            url: '/admin/contact/update-status',
+            url: form.data('url'),
             method: 'POST',
-            data: {
-                id: id,
-                status: status,
-                _token: $('meta[name="csrf-token"]').attr('content')
+            data: form.serialize(),
+            beforeSend: function() {
+                btn.prop('disabled', true)
+                   .html('<i class="fa fa-spinner fa-spin"></i> Đang gửi...');
             },
             success: function(response) {
                 if (response.success) {
-                    toastr.success('Cập nhật trạng thái thành công');
+                    toastr.success('Đã gửi trả lời thành công');
+                    // Cập nhật UI sau khi trả lời
+                    updateStatusBadge('replied');
+                    form.hide();
+                    $('.alert-replied').show();
                 }
             },
             error: function(xhr) {
-                toastr.error('Có lỗi xảy ra khi cập nhật trạng thái');
-                // Khôi phục giá trị cũ nếu có lỗi
-                select.val(select.find('option[selected]').val());
+                toastr.error(xhr.responseJSON.error || 'Có lỗi xảy ra');
+                btn.prop('disabled', false)
+                   .html('<i class="fa fa-paper-plane"></i> Gửi trả lời');
             }
         });
     });
 
-    // Handle reply form submission
-    $('#replyForm').on('submit', function(e) {
-        e.preventDefault();
+    // Helper function để cập nhật badge trạng thái
+    function updateStatusBadge(status) {
+        const badges = {
+            'new': 'badge-primary',
+            'read': 'badge-info',
+            'replied': 'badge-success'
+        };
         
-        $.ajax({
-            url: $(this).data('url'),
-            method: 'POST',
-            data: $(this).serialize(),
-            beforeSend: function() {
-                $('#btnSendReply').prop('disabled', true)
-                    .html('<i class="fa fa-spinner fa-spin"></i> Đang gửi...');
-            },
-            success: function(response) {
-                toastr.success(response.message);
-                setTimeout(function() {
-                    location.reload();
-                }, 1500);
-            },
-            error: function(xhr) {
-                toastr.error(xhr.responseJSON.error || 'Có lỗi xảy ra');
-                $('#btnSendReply').prop('disabled', false)
-                    .html('<i class="fa fa-paper-plane"></i> Gửi trả lời');
-            }
-        });
-    });
+        const labels = {
+            'new': 'Mới',
+            'read': 'Đã đọc',
+            'replied': 'Đã trả lời'
+        };
+
+        const badge = $('.status-badge');
+        badge.removeClass(Object.values(badges).join(' '))
+             .addClass(badges[status])
+             .text(labels[status]);
+    }
 };
 
     // Initialize khi document ready
@@ -220,7 +285,6 @@
         HT.orderStatus();
         HT.trackingNumber();
         HT.review();
-        HT.featuredStatus();
         HT.contact();
     });
 })(jQuery);

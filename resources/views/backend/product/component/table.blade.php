@@ -29,7 +29,8 @@
                 <td>
                     <div class="switch">
                         <div class="onoffswitch">
-                            <input type="checkbox" class="onoffswitch-checkbox js-switch" 
+                            <input type="checkbox" class="onoffswitch-checkbox js-switch-product-featured" 
+                                   {{ $product->featured ? 'checked' : '' }}
                                    data-id="{{ $product->id }}" 
                                    id="featured{{ $product->id }}"
                                    {{ $product->featured ? 'checked' : '' }}>
@@ -40,7 +41,8 @@
                 <td>
                     <div class="switch">
                         <div class="onoffswitch">
-                            <input type="checkbox" class="onoffswitch-checkbox js-switch" 
+                            <input type="checkbox" class="onoffswitch-checkbox js-switch-product-status" 
+                                   //{{ $product->status ? 'checked' : '' }}
                                    data-id="{{ $product->id }}" 
                                    id="status{{ $product->id }}"
                                    {{ $product->status ? 'checked' : '' }}>

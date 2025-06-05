@@ -9,6 +9,19 @@ class Contact extends Model
 {
      use HasFactory;
 
+     const STATUS_NEW = 'new';
+    const STATUS_READ = 'read';
+    const STATUS_REPLIED = 'replied';
+
+    /**
+     * Danh sách các trạng thái
+     */
+    public static $statuses = [
+        self::STATUS_NEW => 'Mới',
+        self::STATUS_READ => 'Đã đọc',
+        self::STATUS_REPLIED => 'Đã trả lời'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,18 +39,6 @@ class Contact extends Model
     /**
      * Các trạng thái có thể có của contact
      */
-    const STATUS_NEW = 'new';
-    const STATUS_READ = 'read';
-    const STATUS_REPLIED = 'replied';
-
-    /**
-     * Danh sách các trạng thái
-     */
-    public static $statuses = [
-        self::STATUS_NEW => 'Mới',
-        self::STATUS_READ => 'Đã đọc',
-        self::STATUS_REPLIED => 'Đã trả lời'
-    ];
 
     /**
      * Check if contact is new

@@ -27,9 +27,9 @@ class FrontendCategoryController extends Controller
         }
 
         $products = $this->productService->getProductsByCategory($category->id);
-        $categories = $this->categoryService->getAllCategories();
+        //$categories = $this->categoryService->getAllCategories();
         
-        return view('frontend.category.show', compact('category', 'products', 'categories'));
+        return view('frontend.category.show', compact('category', 'products'));
     }
 
     public function findBySlug($slug)

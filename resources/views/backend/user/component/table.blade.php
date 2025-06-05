@@ -25,7 +25,7 @@
                 <td>{{ $user->address }}</td>
                 <td class="text-center">
                     <input type="checkbox" 
-                    class="js-switch" 
+                    class="js-switch-user" 
                     data-id="{{ $user->id }}"
                     {{ $user->status == 1? 'checked' : '' }} />
                 </td>

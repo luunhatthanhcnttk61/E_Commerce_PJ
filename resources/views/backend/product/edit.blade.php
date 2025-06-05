@@ -56,6 +56,21 @@
                         <label>Mô tả</label>
                         <textarea name="description" class="form-control">{{ old('description', $product->description) }}</textarea>
                     </div>
+                    <div class="form-group">
+                        <label>Danh mục <span class="text-danger">*</span></label>
+                        <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
+                            <option value="">Chọn danh mục</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" 
+                                    {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                     <div class="form-group">
                         <label>Hình ảnh</label>

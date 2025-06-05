@@ -41,5 +41,9 @@ class UserService implements UserServiceInterface
     {
         return $this->userRepository->findById($id);
     }
+    public function updateStatus($userId, $status)
+    {
+        return $this->userRepository->updateStatus($userId, $status);
+    }
 
 }

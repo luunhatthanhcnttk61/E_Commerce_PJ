@@ -1,27 +1,55 @@
-<?php
-@extends('frontend.layouts.master')
+<@extends('frontend.layouts.master')
 
 @section('title', $product->name)
 
 @section('content')
 <div class="container">
-    <nav aria-label="breadcrumb" class="my-3">
+    {{-- <nav aria-label="breadcrumb" class="my-3">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('client.home') }}">Trang chủ</a></li>
             <li class="breadcrumb-item"><a href="{{ route('client.category.show', $product->category->slug) }}">{{ $product->category->name }}</a></li>
+            <li class="breadcrumb-item active">{{ $product->name }}</li>
+        </ol>
+    </nav> --}}
+    <nav aria-label="breadcrumb" class="my-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('client.home') }}">Trang chủ</a></li>
+            @if($product->category)
+                <li class="breadcrumb-item">
+                    <a href="{{ route('client.category.show', $product->category->slug) }}">
+                        {{ $product->category->name }}
+                    </a>
+                </li>
+            @endif
             <li class="breadcrumb-item active">{{ $product->name }}</li>
         </ol>
     </nav>
 
     <div class="row">
         <div class="col-md-6">
-            <div class="product-gallery">
+            {{-- <div class="product-gallery">
                 <img src="{{ $product->image }}" alt="{{ $product->name }}" class="img-fluid main-image">
                 <div class="thumbnail-images mt-3">
-                    @foreach($product->images as $image)
-                        <img src="{{ $image }}" alt="{{ $product->name }}" class="thumbnail">
-                    @endforeach
+                    @if($product->images && is_array($product->images))
+                        @foreach($product->images as $image)
+                            <img src="{{ $image }}" alt="{{ $product->name }}" class="thumbnail">
+                        @endforeach
+                    @endif
                 </div>
+            </div> --}}
+            <div class="product-gallery">
+                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="img-fluid main-image">
+                
+                @if($product->images->count() > 0)
+                    <div class="thumbnail-images mt-3">
+                        @foreach($product->images as $image)
+                            <img src="{{ asset($image->image) }}" 
+                                alt="{{ $product->name }}" 
+                                class="thumbnail"
+                                onclick="changeMainImage(this.src)">
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
         <div class="col-md-6">
@@ -69,3 +97,10 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+function changeMainImage(src) {
+    document.querySelector('.main-image').src = src;
+}
+</script>
+@endpush

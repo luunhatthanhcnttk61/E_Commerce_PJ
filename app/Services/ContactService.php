@@ -2,6 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Contact;
+use App\Mail\ContactReplyMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Repositories\Interfaces\ContactRepositoryInterface as ContactRepository;
 use App\Services\Interfaces\ContactServiceInterface;
 
@@ -28,12 +32,15 @@ class ContactService implements ContactServiceInterface
 
     public function updateStatus($id, $status)
     {
+        if (!in_array($status, [Contact::STATUS_NEW, Contact::STATUS_READ, Contact::STATUS_REPLIED])) {
+        throw new \InvalidArgumentException('Invalid status value');
+    }
         return $this->contactRepository->updateContact($id, ['status' => $status]);
     }
 
     public function create(array $data)
     {
-        $data['status'] = 'pending';
+        $data['status'] = Contact::STATUS_NEW;
         return $this->contactRepository->create($data);
     }
     public function findById($id)
