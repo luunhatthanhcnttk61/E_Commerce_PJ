@@ -20,35 +20,68 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-         // Kiểm tra quyền xem danh sách
-        if (!auth()->user()->canViewUsers()) {
-            return redirect()->route('admin.dashboard.index')
-                           ->with('error', 'Bạn không có quyền truy cập');
-        }
+        //  // Kiểm tra quyền xem danh sách
+        // if (!auth()->user()->canViewUsers()) {
+        //     return redirect()->route('admin.dashboard.index')
+        //                    ->with('error', 'Bạn không có quyền truy cập');
+        // }
 
-        $keyword = $request->input('keyword');
-        $perpage = $request->input('perpage', 10);
+        // $keyword = $request->input('keyword');
+        // $perpage = $request->input('perpage', 10);
 
-        $query = User::query();
+        // $query = User::query();
         
-        if(!empty($keyword)) {
-            $query->where('name', 'like', '%' . trim($keyword) . '%');
-        }
+        // if(!empty($keyword)) {
+        //     $query->where('name', 'like', '%' . trim($keyword) . '%');
+        // }
 
-        // Nếu là admin thì xem được tất cả, không phải admin thì chỉ xem được user thường
-        if (!auth()->user()->isAdmin()) {
-            $query->where('role', 'client');
-        }
+        // // Nếu là admin thì xem được tất cả, không phải admin thì chỉ xem được user thường
+        // if (!auth()->user()->isAdmin()) {
+        //     $query->where('role', 'client');
+        // }
 
-        $users = $query->paginate($perpage);
+        // $users = $query->paginate($perpage);
 
-        $config = $this->config();
-        $template = 'backend.user.index';
-        return view('backend.dashboard.layout', compact(
-            'template',
-            'config',
-            'users',
-        ));
+        // $config = $this->config();
+        // $template = 'backend.user.index';
+        // return view('backend.dashboard.layout', compact(
+        //     'template',
+        //     'config',
+        //     'users',
+        // ));
+
+        // Kiểm tra quyền xem danh sách
+    if (!auth()->user()->canViewUsers()) {
+        return redirect()->route('admin.dashboard.index')
+                       ->with('error', 'Bạn không có quyền truy cập');
+    }
+
+    $keyword = $request->input('keyword');
+    $perpage = $request->input('perpage', 10);
+
+    $query = User::query();
+    
+    if(!empty($keyword)) {
+        $query->where('name', 'like', '%' . trim($keyword) . '%');
+    }
+
+    // Exclude customers from user management
+    $query->where('role', '!=', 'customer');
+
+    // Nếu là admin thì xem được tất cả, không phải admin thì chỉ xem được user thường
+    if (!auth()->user()->isAdmin()) {
+        $query->where('role', 'client');
+    }
+
+    $users = $query->paginate($perpage);
+
+    $config = $this->config();
+    $template = 'backend.user.index';
+    return view('backend.dashboard.layout', compact(
+        'template',
+        'config',
+        'users',
+    ));
 
     }
 

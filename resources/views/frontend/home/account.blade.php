@@ -33,7 +33,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('client.logout') }}">
+                                <a class="nav-link" href="{{ route('client.auth.logout') }}">
                                     <i class="fas fa-sign-out-alt"></i> Đăng xuất
                                 </a>
                             </li>

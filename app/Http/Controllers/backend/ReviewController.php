@@ -43,10 +43,16 @@ class ReviewController extends Controller
     public function updateStatus(Request $request)
     {
         $id = $request->input('id');
-        $status = $request->input('status');
-        
-        $result = $this->reviewService->updateStatus($id, $status);
-        
-        return response()->json(['success' => $result]);
+            $status = $request->input('status');
+
+            $review = \App\Models\Review::find($id);
+            if (!$review) {
+                return response()->json(['success' => false, 'message' => 'Không tìm thấy đánh giá']);
+            }
+
+            $review->status = $status;
+            $review->save();
+
+            return response()->json(['success' => true]);
     }
 }

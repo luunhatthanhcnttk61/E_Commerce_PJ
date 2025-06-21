@@ -24,11 +24,11 @@
                         <p><strong>Phương thức thanh toán:</strong> {{ $order->payment_method }}</p>
                         <p><strong>Trạng thái:</strong> 
                             <select class="form-control order-status" data-id="{{ $order->id }}">
-                                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
-                                <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
-                                <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>Đang giao</option>
-                                <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Đã giao</option>
-                                <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                                <option value="pending" {{ $order->order_status == 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
+                                <option value="processing" {{ $order->order_status == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
+                                <option value="shipped" {{ $order->order_status == 'shipped' ? 'selected' : '' }}>Đang giao</option>
+                                <option value="delivered" {{ $order->order_status == 'delivered' ? 'selected' : '' }}>Đã giao</option>
+                                <option value="cancelled" {{ $order->order_status == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
                             </select>
                         </p>
                     </div>
@@ -63,3 +63,4 @@
         </div>
     </div>
 </div>
+

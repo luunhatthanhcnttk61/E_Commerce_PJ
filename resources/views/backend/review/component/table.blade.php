@@ -27,22 +27,19 @@
                 </td>
                 <td>{{ Str::limit($review->comment, 50) }}</td>
                 
-                <!-- Switch button trạng thái -->
                 <td>
-                    <div class="switch">
-                        <div class="onoffswitch">
-                            <input type="checkbox" 
-                                   class="onoffswitch-checkbox js-switch" 
-                                   data-id="{{ $review->id }}"
-                                   id="status_{{ $review->id }}" 
-                                   {{ $review->status == 'approved' ? 'checked' : '' }}>
-                            <label class="onoffswitch-label" for="status_{{ $review->id }}">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
+                    @switch($review->status)
+                        @case('approved')
+                            <span class="badge bg-success">Đã duyệt</span>
+                            @break
+                        @case('rejected')
+                            <span class="badge bg-danger">Đã từ chối</span>
+                            @break
+                        @default
+                            <span class="badge bg-warning text-dark">Đang chờ duyệt</span>
+                    @endswitch
                 </td>
+                
                 <td>{{ $review->created_at->format('d/m/Y H:i') }}</td>
                 
                 <!-- Nút xem chi tiết -->

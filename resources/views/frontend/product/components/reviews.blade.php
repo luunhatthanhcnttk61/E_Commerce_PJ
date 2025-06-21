@@ -31,30 +31,13 @@
         <form action="{{ route('client.review.store') }}" method="POST" class="mt-3">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
-            
-            <div class="mb-3">
-                <label class="form-label">Họ tên <span class="text-danger">*</span></label>
-                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" required>
-                @error('name')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Email <span class="text-danger">*</span></label>
-                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" required>
-                @error('email')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
 
             <div class="mb-3">
                 <label class="form-label">Đánh giá <span class="text-danger">*</span></label>
                 <div class="rating-select">
                     @for($i = 5; $i >= 1; $i--)
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="rating" 
-                                   id="rating{{ $i }}" value="{{ $i }}" required>
+                            <input class="form-check-input" type="radio" name="rating" id="rating{{ $i }}" value="{{ $i }}" required>
                             <label class="form-check-label" for="rating{{ $i }}">{{ $i }} sao</label>
                         </div>
                     @endfor
@@ -66,9 +49,8 @@
 
             <div class="mb-3">
                 <label class="form-label">Nội dung đánh giá <span class="text-danger">*</span></label>
-                <textarea name="content" rows="4" 
-                          class="form-control @error('content') is-invalid @enderror" required></textarea>
-                @error('content')
+                <textarea name="comment" rows="4" class="form-control @error('comment') is-invalid @enderror" required></textarea>
+                @error('comment')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>

@@ -14,13 +14,13 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="{{ asset('frontend/images/banner1.jpg') }}" class="d-block w-100" alt="Banner 1">
+                <img src="{{ asset('uploads/banner/banner1.jpg') }}" class="d-block w-100" alt="Banner 1">
             </div>
             <div class="carousel-item">
-                <img src="{{ asset('frontend/images/banner2.jpg') }}" class="d-block w-100" alt="Banner 2">
+                <img src="{{ asset('uploads/banner/banner2.jpg') }}" class="d-block w-100" alt="Banner 2">
             </div>
             <div class="carousel-item">
-                <img src="{{ asset('frontend/images/banner3.jpg') }}" class="d-block w-100" alt="Banner 3">
+                <img src="{{ asset('uploads/banner/banner3.jpg') }}" class="d-block w-100" alt="Banner 3">
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">

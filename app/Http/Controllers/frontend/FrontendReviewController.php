@@ -23,10 +23,15 @@ class FrontendReviewController extends Controller
             'comment' => 'required|string|max:500'
         ]);
 
-        $data = $request->all();
-        $data['user_id'] = auth()->id();
+        $data = [
+            'product_id' => $request->product_id,
+            'customer_id' => auth()->id(),
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+            'status' => 'pending' // hoặc tự động approved nếu bạn muốn
+    ];
 
-        $review = $this->reviewService->create($data);
+        $review = $this->reviewService->createReview($data);
 
         return redirect()->back()->with('success', 'Đánh giá của bạn đã được gửi');
     }

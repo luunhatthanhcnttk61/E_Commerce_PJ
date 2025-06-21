@@ -15,7 +15,14 @@ class CheckAdminRole
                 ->with('error', 'Vui lòng đăng nhập');
         }
 
-        if (!Auth::user()->canAccessDashboard()) {
+        // if (!Auth::user()->canAccessDashboard()) {
+        //     return redirect()->route('client.home')
+        //             ->with('error', 'Bạn không có quyền truy cập trang quản trị');
+        // }
+
+        // Check if user is customer
+        if (Auth::user()->role === 'customer') {
+            Auth::logout(); // Logout user
             return redirect()->route('client.home')
                     ->with('error', 'Bạn không có quyền truy cập trang quản trị');
         }

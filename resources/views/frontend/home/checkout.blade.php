@@ -35,7 +35,21 @@
                             <label>Ghi chú</label>
                             <textarea name="note" class="form-control" rows="3"></textarea>
                         </div>
-                        
+                        <h4 class="mt-4">Phương thức giao hàng</h4>
+                            <div class="shipping-methods mb-3">
+                                <div class="form-check mb-2">
+                                    <input type="radio" name="shipping_method" value="standard" class="form-check-input" checked>
+                                    <label class="form-check-label">Giao hàng tiêu chuẩn (3-5 ngày)</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input type="radio" name="shipping_method" value="express" class="form-check-input">
+                                    <label class="form-check-label">Giao hàng nhanh (1-2 ngày)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="shipping_method" value="same_day" class="form-check-input">
+                                    <label class="form-check-label">Giao trong ngày</label>
+                                </div>
+                            </div>
                         <h4 class="mt-4">Phương thức thanh toán</h4>
                         <div class="payment-methods">
                             <div class="form-check mb-2">
@@ -52,7 +66,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary mt-4">Đặt hàng</button>
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Đặt hàng</button>
                     </form>
                 </div>
             </div>

@@ -122,11 +122,21 @@ Route::name('client.')->group(function () {
     
     // Auth Routes
     Route::prefix('auth')->name('auth.')->group(function() {
+        Route::middleware('guest')->group(function() {
         Route::get('/login', [ClientAuth::class, 'showLoginForm'])->name('login');
         Route::post('/login', [ClientAuth::class, 'login'])->name('login.post');
         Route::get('/register', [ClientAuth::class, 'showRegistrationForm'])->name('register');
         Route::post('/register', [ClientAuth::class, 'register'])->name('register.post');
-        Route::post('/logout', [ClientAuth::class, 'logout'])->name('logout');
+        });
+        Route::middleware('auth')->group(function() {
+            Route::get('/logout', [ClientAuth::class, 'logout'])->name('logout');
+        });
+        // Social Login Routes
+        Route::get('google', [ClientAuth::class, 'redirectToGoogle'])->name('google');
+        Route::get('google/callback', [ClientAuth::class, 'handleGoogleCallback']);
+        
+        Route::get('facebook', [ClientAuth::class, 'redirectToFacebook'])->name('facebook');
+        Route::get('facebook/callback', [ClientAuth::class, 'handleFacebookCallback']);
     });
 
     // Product Routes (Public)
@@ -136,8 +146,8 @@ Route::name('client.')->group(function () {
         Route::get('/{id}', [FrontendProductController::class, 'show'])->name('show');
     });
 
-    // Cart Routes (Public)
-    Route::prefix('cart')->name('cart.')->group(function() {
+    // Cart Routes (Protected)
+    Route::prefix('cart')->name('cart.')->middleware('auth')->group(function() {
         Route::get('/', [CartController::class, 'index'])->name('index');
         Route::post('/add', [CartController::class, 'add'])->name('add');
         Route::post('/update', [CartController::class, 'update'])->name('update');
@@ -169,6 +179,8 @@ Route::name('client.')->group(function () {
             Route::get('/success/{order}', [CheckoutController::class, 'success'])->name('success');
             Route::get('/failed/{order}', [CheckoutController::class, 'failed'])->name('failed');
             Route::get('/callback', [CheckoutController::class, 'callback'])->name('callback');
+            Route::get('/vnpay/{order}', [CheckoutController::class, 'vnpay'])->name('vnpay');
+            Route::get('/momo/{order}', [CheckoutController::class, 'momo'])->name('momo');
         });
 
         // Account Routes

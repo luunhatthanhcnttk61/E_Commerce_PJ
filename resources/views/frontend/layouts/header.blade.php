@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <span><i class="fas fa-phone"></i> Hotline: 1900 xxxx</span>
+                <span><i class="fas fa-phone"></i> Hotline: 1900 1234</span>
                 <span class="ml-3"><i class="fas fa-envelope"></i> Email: support@example.com</span>
             </div>
             <div class="col-md-6">
@@ -12,7 +12,7 @@
                         <a href="{{ route('client.account.index') }}" class="text-light me-3">
                             <i class="fas fa-user"></i> Tài khoản
                         </a>
-                        <form action="{{ route('client.auth.logout') }}" method="POST" class="d-inline">
+                        <form action="{{ route('client.auth.logout') }}" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-link text-light p-0">
                                 <i class="fas fa-sign-out-alt"></i> Đăng xuất
@@ -79,7 +79,13 @@
                 <div class="cart-icon">
                     <a href="{{ route('client.cart.index') }}" class="btn btn-outline-primary">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="badge bg-primary cart-count">{{ Cart::getTotalQuantity() }}</span>
+                        <span class="badge bg-primary cart-count">
+                            @auth
+                                {{ App\Models\Cart::where('user_id', Auth::id())->sum('quantity') }}
+                            @else
+                                0
+                            @endauth
+                        </span>
                     </a>
                 </div>
             </div>

@@ -8,15 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
+        'id',
         'order_code',
         'user_id',
-        'total_amount',
+        'name',
+        'email',
+        'phone',
+        'address',
         'shipping_address',
-        'payment_method',
         'shipping_method',
-        'tracking_number',
-        'status',
-        'notes'
+        'note',
+        'total_amount',
+        'payment_method',
+        'payment_status',
+        'order_status'
     ];
 
     public function user()
@@ -27,5 +32,14 @@ class Order extends Model
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($order) {
+            $order->order_code = 'ORD-' . time();
+        });
     }
 }

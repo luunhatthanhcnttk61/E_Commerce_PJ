@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Interfaces\OrderServiceInterface as OrderService;
+use App\Models\Order;
 
 class OrderController extends Controller
 {
@@ -37,7 +38,7 @@ class OrderController extends Controller
         }
 
         $config = $this->config();
-        $template = 'backend.order.show';
+        $template = 'backend.order.detail';
         
         return view('backend.dashboard.layout', compact(
             'template',
@@ -48,16 +49,36 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
+        // $request->validate([
+        //     'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
+        // ]);
+
+        // $result = $this->orderService->updateStatus($id, $request->status);
+
+        // if($result) {
+        //     return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công');
+        // }
+        // return redirect()->back()->with('error', 'Cập nhật trạng thái thất bại');
         $request->validate([
             'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
         ]);
 
-        $result = $this->orderService->updateStatus($id, $request->status);
+        try {
+            $order = Order::findOrFail($id);
+            $order->order_status = $request->status;
+            $order->status = $request->status;
+            $order->save();
 
-        if($result) {
-            return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công');
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật trạng thái thành công'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+            ], 500);
         }
-        return redirect()->back()->with('error', 'Cập nhật trạng thái thất bại');
     }
 
     public function updateTracking(Request $request, $id)

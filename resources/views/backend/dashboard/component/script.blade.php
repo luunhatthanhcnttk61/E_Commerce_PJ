@@ -3,6 +3,7 @@
 <script src="{{ asset('backends/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('backends/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
 <script src="{{ asset('backends/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="{{ asset('library/library.js') }}"></script>
 
 

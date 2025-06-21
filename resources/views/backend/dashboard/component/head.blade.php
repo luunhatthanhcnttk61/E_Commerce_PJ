@@ -7,6 +7,7 @@
 <link href="{{ asset ('backends/css/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ asset ('backends/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
 <link href="{{ asset ('backends/css/animate.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
 @if(isset($config['css']) && is_array($config['css']))
     @foreach($config['css'] as $key => $val)

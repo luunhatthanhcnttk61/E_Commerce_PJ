@@ -11,6 +11,7 @@ class Customer extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
+        'user_id',
         'name',
         'email', 
         'phone',
@@ -29,5 +30,10 @@ class Customer extends Model
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

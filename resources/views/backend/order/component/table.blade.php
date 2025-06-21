@@ -18,13 +18,24 @@
             <td>{{ number_format($order->total_amount) }}đ</td>
             <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
             <td>
-                <select class="form-control order-status" data-id="{{ $order->id }}">
-                    <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
-                    <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
-                    <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>Đang giao</option>
-                    <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Đã giao</option>
-                    <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
-                </select>
+                @php
+                    $statuses = [
+                        'pending' => 'Chờ xử lý',
+                        'processing' => 'Đang xử lý',
+                        'shipped' => 'Đang giao',
+                        'delivered' => 'Đã giao',
+                        'cancelled' => 'Đã hủy'
+                    ];
+                @endphp
+                <span class="badge 
+                    {{ $order->order_status == 'pending' ? 'badge-warning' : '' }}
+                    {{ $order->order_status == 'processing' ? 'badge-primary' : '' }}
+                    {{ $order->order_status == 'shipped' ? 'badge-info' : '' }}
+                    {{ $order->order_status == 'delivered' ? 'badge-success' : '' }}
+                    {{ $order->order_status == 'cancelled' ? 'badge-danger' : '' }}"
+                >
+                    {{ $statuses[$order->order_status] ?? 'Không xác định' }}
+                </span>
             </td>
             <td>
                 <input type="text" class="form-control tracking-number" 

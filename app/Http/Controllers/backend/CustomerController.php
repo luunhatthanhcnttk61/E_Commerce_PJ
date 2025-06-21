@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Services\Interfaces\CustomerServiceInterface as CustomerService;
 
@@ -17,7 +18,44 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
-        $customers = $this->customerService->getCustomers($request);
+        // $customers = $this->customerService->getCustomers($request);
+        // $config = $this->config();
+        // $template = 'backend.customer.index';
+        
+        // return view('backend.dashboard.layout', compact(
+        //     'template',
+        //     'config',
+        //     'customers'
+        // ));
+
+        $query = Customer::query();
+
+        if ($request->has('keyword')) {
+            $keyword = $request->input('keyword');
+            $query->where(function($q) use ($keyword) {
+                $q->where('name', 'like', '%' . $keyword . '%')
+                ->orWhere('email', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        // Join with orders using user_id instead of customer_id
+        $customers = $query->leftJoin('orders', 'customers.id', '=', 'orders.user_id')
+            ->select(
+                'customers.*',
+                \DB::raw('COUNT(DISTINCT orders.id) as orders_count'),
+                \DB::raw('COALESCE(SUM(orders.total_amount), 0) as total_spent')
+            )
+            ->groupBy(
+                'customers.id',
+                'customers.name',
+                'customers.email',
+                'customers.phone',
+                'customers.address',
+                'customers.created_at',
+                'customers.updated_at'
+            )
+            ->paginate(10);
+
         $config = $this->config();
         $template = 'backend.customer.index';
         

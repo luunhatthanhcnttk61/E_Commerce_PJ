@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Interfaces\UserServiceInterface;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Order;
+use App\Models\OrderDetail;
 
 class AccountController extends Controller
 {
@@ -40,19 +42,25 @@ class AccountController extends Controller
 
     public function orders()
     {
-        $orders = auth()->user()->orders()->paginate(10);
-        return view('frontend.account.orders', compact('orders'));
+        // $orders = auth()->user()->orders()->paginate(10);
+        // return view('frontend.account.orders', compact('orders'));
+        $orders = Order::where('user_id', auth()->id())
+                   ->with('orderDetails.product')
+                   ->latest()
+                   ->get();
+
+    return view('frontend.home.order', compact('orders'));
     }
 
     public function addresses()
     {
         $addresses = auth()->user()->addresses;
-        return view('frontend.account.addresses', compact('addresses'));
+        return view('frontend.home.addresses', compact('addresses'));
     }
 
     public function password()
     {
-        return view('frontend.account.password');
+        return view('frontend.home.password');
     }
 
     public function updatePassword(Request $request)
