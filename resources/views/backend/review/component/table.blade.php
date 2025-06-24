@@ -15,12 +15,10 @@
         <tbody>
             @foreach($reviews as $review)
             <tr>
-                <!-- Các cột dữ liệu -->
                 <td>{{ $review->id }}</td>
                 <td>{{ $review->product->name }}</td>
                 <td>{{ $review->customer->name }}</td>
                 <td>
-                    <!-- Hiển thị sao đánh giá -->
                     @for($i = 1; $i <= 5; $i++)
                         <i class="fa fa-star {{ $i <= $review->rating ? 'text-warning' : 'text-muted' }}"></i>
                     @endfor
@@ -39,10 +37,9 @@
                             <span class="badge bg-warning text-dark">Đang chờ duyệt</span>
                     @endswitch
                 </td>
-                
+
                 <td>{{ $review->created_at->format('d/m/Y H:i') }}</td>
-                
-                <!-- Nút xem chi tiết -->
+        
                 <td>
                     <button type="button" 
                             class="btn btn-xs btn-primary view-review" 
@@ -57,9 +54,7 @@
         </tbody>
     </table>
     
-    <!-- Phân trang -->
     {{ $reviews->links() }}
 </div>
 
-<!-- Modal xem chi tiết -->
 @include('backend.review.component.modal')

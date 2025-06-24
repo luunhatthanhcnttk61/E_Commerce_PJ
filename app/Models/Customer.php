@@ -26,7 +26,6 @@ class Customer extends Model
         'remember_token',
     ];
 
-    // Thêm relationship với Order
     public function orders()
     {
         return $this->hasMany(Order::class);

@@ -42,14 +42,12 @@ class AccountController extends Controller
 
     public function orders()
     {
-        // $orders = auth()->user()->orders()->paginate(10);
-        // return view('frontend.account.orders', compact('orders'));
         $orders = Order::where('user_id', auth()->id())
                    ->with('orderDetails.product')
                    ->latest()
                    ->get();
 
-    return view('frontend.home.order', compact('orders'));
+         return view('frontend.home.order', compact('orders'));
     }
 
     public function addresses()

@@ -49,16 +49,6 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        // $request->validate([
-        //     'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
-        // ]);
-
-        // $result = $this->orderService->updateStatus($id, $request->status);
-
-        // if($result) {
-        //     return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công');
-        // }
-        // return redirect()->back()->with('error', 'Cập nhật trạng thái thất bại');
         $request->validate([
             'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
         ]);

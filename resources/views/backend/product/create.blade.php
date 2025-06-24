@@ -78,6 +78,15 @@
                         <label>Hình ảnh khác</label>
                         <input type="file" name="product_images[]" class="form-control" multiple>
                     </div>
+                    <div class="form-group">
+                        <label for="discount_percent">Giảm giá (%)</label>
+                        <input type="number" step="0.01" name="discount_percent" class="form-control" value="{{ old('discount_percent', $product->discount_percent ?? '') }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discount_end_at">Hạn khuyến mãi đến</label>
+                        <input type="datetime-local" name="discount_end_at" class="form-control" value="{{ old('discount_end_at', isset($product->discount_end_at) ? \Carbon\Carbon::parse($product->discount_end_at)->format('Y-m-d\TH:i') : '') }}">
+                    </div>
 
                     <button type="submit" class="btn btn-primary">Thêm mới</button>
                     <a href="{{ route('admin.product.index') }}" class="btn btn-default">Quay lại</a>

@@ -9,6 +9,8 @@
             <th>Tồn kho</th>
             <th>Nổi bật</th>
             <th>Trạng thái</th>
+            <th>Khuyến mãi (%)</th>
+            <th>Khuyến mãi đến</th>
             <th>Thao tác</th>
         </tr>
     </thead>
@@ -49,6 +51,21 @@
                             {{-- <label class="onoffswitch-label" for="status{{ $product->id }}"></label> --}}
                         </div>
                     </div>
+                </td>
+                <td>
+                    @if($product->discount_percent)
+                        {{ $product->discount_percent }}%
+                        {{-- {{ number_format($product->price * (1 - $product->discount_percent / 100)) }}đ --}}
+                    @else
+                        Không có
+                    @endif
+                </td>
+                <td>
+                    @if($product->discount_end_at)
+                        {{ $product->discount_end_at->format('d/m/Y') }}
+                    @else
+                        Không có
+                    @endif
                 </td>
                 <td>
                     <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-success btn-sm">

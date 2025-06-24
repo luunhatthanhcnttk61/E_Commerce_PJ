@@ -11,7 +11,7 @@ class Setting extends Model
         'key',
         'value',
         'description',
-        'type'  // text, textarea, image, boolean,...
+        'type'  
     ];
 
     public $timestamps = false;

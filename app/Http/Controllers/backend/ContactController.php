@@ -59,7 +59,6 @@ class ContactController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy liên hệ');
             }
             
-            // Auto update status to 'read' if it's new
             if ($contact->isNew()) {
                 $this->contactService->updateStatus($id, Contact::STATUS_READ);
                 $contact->refresh();

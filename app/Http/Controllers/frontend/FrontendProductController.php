@@ -30,15 +30,25 @@ class FrontendProductController extends Controller
     public function show($id)
     {
         $product = $this->productService->findById($id);
-        if(!$product) {
+        if (!$product) {
             abort(404);
         }
 
+        $approvedReviews = $product->reviews()
+            ->where('status', 'approved')
+            ->with('customer')
+            ->latest()
+            ->get();
+
+        $product->load(['category', 'images']);
+
         $relatedProducts = $this->productService->getRelatedProducts($id);
         
-        $product->load(['category', 'reviews']);
-        
-        return view('frontend.product.detail', compact('product', 'relatedProducts'));
+        return view('frontend.product.detail', compact(
+            'product',
+            'approvedReviews',
+            'relatedProducts'
+        ));
     }
 
     public function byCategory($category_id)

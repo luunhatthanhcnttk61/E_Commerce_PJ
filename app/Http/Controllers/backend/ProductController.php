@@ -59,7 +59,9 @@ class ProductController extends Controller
         'code' => 'required|string|unique:products',
         'category_id'=> 'required|exists:categories,id',
         'price' => 'required|numeric|min:0',
-        'inventory' => 'required|integer|min:0',
+        'inventory' => 'required|integer|min:0|',
+        'discount_percent' => 'nullable|numeric|min:0|max:100',
+        'discount_end_at' => 'nullable|date|after:now',
     ]);
 
     $data = $request->all();
@@ -75,8 +77,6 @@ class ProductController extends Controller
 
     // Create product first
     $product = $this->productService->create($data);
-
-    // Then upload multiple images if product was created successfully
     if($product && $request->hasFile('product_images')) {
         foreach($request->file('product_images') as $image) {
             $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
@@ -111,13 +111,20 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|unique:products,code,'.$id,
+            'code' => 'required|string|unique:products,code,' . $id,
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'inventory' => 'required|integer|min:0',
+            'discount_percent' => 'nullable|numeric|min:0|max:100',
+            'discount_end_at' => 'nullable|date|after:now',
         ]);
 
         $data = $request->all();
+
+        $product = $this->productService->findById($id);
+        if (!$product) {
+            return redirect()->route('admin.product.index')->with('error', 'Không tìm thấy sản phẩm');
+        }
 
         if($request->hasFile('image')) {
             $image = $request->file('image');
@@ -155,16 +162,6 @@ class ProductController extends Controller
         }
         return redirect()->back()->with('error', 'Xóa sản phẩm thất bại');
     }
-
-    // public function updateStatus(Request $request)
-    // {
-    //     $id = $request->input('id');
-    //     $status = $request->input('status');
-        
-    //     $result = $this->productService->update($id, ['status' => $status]);
-        
-    //     return response()->json(['success' => $result]);
-    // }
 
     public function updateStatus(Request $request)
     {

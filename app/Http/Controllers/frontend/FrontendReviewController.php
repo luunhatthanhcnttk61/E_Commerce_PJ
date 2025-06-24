@@ -28,7 +28,7 @@ class FrontendReviewController extends Controller
             'customer_id' => auth()->id(),
             'rating' => $request->rating,
             'comment' => $request->comment,
-            'status' => 'pending' // hoặc tự động approved nếu bạn muốn
+            'status' => 'pending' 
     ];
 
         $review = $this->reviewService->createReview($data);

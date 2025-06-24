@@ -1,22 +1,22 @@
 <div class="product-reviews">
     <!-- Hiển thị đánh giá -->
-    @if($product->reviews && $product->reviews->count() > 0)
+    @if($reviews->count() > 0)
         <div class="reviews-list mb-4">
-            @foreach($product->reviews as $review)
+        @foreach($reviews as $review)
                 <div class="review-item border-bottom pb-3 mb-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="user-info">
-                            <strong>{{ $review->name }}</strong>
+                            <strong>{{ $review->customer->name ?? 'Khách hàng ẩn danh' }}</strong>
                             <div class="text-muted small">{{ $review->created_at->format('d/m/Y H:i') }}</div>
                         </div>
                         <div class="rating">
                             @for($i = 1; $i <= 5; $i++)
-                                <i class="fas fa-star {{ $i <= $review->rating ? 'text-warning' : 'text-muted' }}"></i>
+                                <i class="fas fa-star {{ $i <= $review->rating ? 'text-warning' : 'text-muted' }}" ></i>
                             @endfor
                         </div>
                     </div>
                     <div class="review-content mt-2">
-                        {{ $review->content }}
+                        {{ $review->comment }}
                     </div>
                 </div>
             @endforeach

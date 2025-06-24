@@ -5,81 +5,13 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Services\Interfaces\CartServiceInterface;
 use App\Models\Product;
-use Cart; // Assuming you are using the "darryldecode/cart" package or similar
+use Cart; 
 use Illuminate\Http\Request;
-use App\Models\Cart as CartModel; // Assuming you have a Cart model
+use App\Models\Cart as CartModel;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    // protected $cartService;
-
-    // public function __construct(CartServiceInterface $cartService)
-    // {
-    //     $this->cartService = $cartService;
-    // }
-
-    // public function index()
-    // {
-    //     // $cart = $this->cartService->getCart();
-    //     // $total = $this->cartService->getTotal();
-    //     // return view('frontend.cart.index', compact('cart', 'total'));
-
-    //     $cart = Cart::getContent();
-    //     $total = Cart::getTotal();
-    //     return view('frontend.cart.index', compact('cart', 'total'));
-    // }
-
-    // public function add(Request $request)
-    // {
-    //     // $result = $this->cartService->addToCart($request->product_id, $request->quantity);
-    //     // return response()->json([
-    //     //     'success' => $result,
-    //     //     'cartCount' => $this->cartService->getCount()
-    //     // ]);
-
-    //      $product = Product::findOrFail($request->product_id);
-        
-    //     Cart::add([
-    //         'id' => $product->id,
-    //         'name' => $product->name,
-    //         'price' => $product->price,
-    //         'quantity' => $request->quantity,
-    //         'attributes' => [
-    //             'image' => $product->image
-    //         ]
-    //     ]);
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'cartCount' => Cart::getTotalQuantity()
-    //     ]);
-    // }
-
-    // public function update(Request $request)
-    // {
-    //     // $result = $this->cartService->updateCart($request->product_id, $request->quantity);
-    //     // return response()->json(['success' => $result]);
-
-    //     Cart::update($request->product_id, [
-    //         'quantity' => [
-    //             'relative' => false,
-    //             'value' => $request->quantity
-    //         ]
-    //     ]);
-
-    //     return response()->json(['success' => true]);
-    // }
-
-    // public function remove($id)
-    // {
-    //     // $result = $this->cartService->removeFromCart($id);
-    //     // return response()->json(['success' => $result]);
-
-    //      Cart::remove($id);
-    //     return response()->json(['success' => true]);
-    // }
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -106,15 +38,22 @@ class CartController extends Controller
         ]);
 
         $product = Product::findOrFail($request->product_id);
+
+        $hasDiscount = $product->discount_percent > 0 &&
+                    (!$product->discount_end_at || now()->lt($product->discount_end_at));
         
-        $cart = CartModel::updateOrCreate(
+        $finalPrice = $hasDiscount
+            ? $product->price * (1 - $product->discount_percent / 100)
+            : $product->price;
+
+        CartModel::updateOrCreate(
             [
                 'user_id' => Auth::id(),
                 'product_id' => $product->id
             ],
             [
                 'quantity' => \DB::raw('COALESCE(quantity, 0) + ' . $request->quantity),
-                'price' => $product->price
+                'price' => $finalPrice
             ]
         );
 
@@ -124,6 +63,7 @@ class CartController extends Controller
             'cartCount' => CartModel::where('user_id', Auth::id())->sum('quantity')
         ]);
     }
+
 
     public function update(Request $request)
     {

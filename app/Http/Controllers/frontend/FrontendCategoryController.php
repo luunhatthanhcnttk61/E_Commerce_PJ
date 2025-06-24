@@ -27,7 +27,6 @@ class FrontendCategoryController extends Controller
         }
 
         $products = $this->productService->getProductsByCategory($category->id);
-        //$categories = $this->categoryService->getAllCategories();
         
         return view('frontend.category.show', compact('category', 'products'));
     }

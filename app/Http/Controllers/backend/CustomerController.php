@@ -18,16 +18,6 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
-        // $customers = $this->customerService->getCustomers($request);
-        // $config = $this->config();
-        // $template = 'backend.customer.index';
-        
-        // return view('backend.dashboard.layout', compact(
-        //     'template',
-        //     'config',
-        //     'customers'
-        // ));
-
         $query = Customer::query();
 
         if ($request->has('keyword')) {
@@ -38,7 +28,6 @@ class CustomerController extends Controller
             });
         }
 
-        // Join with orders using user_id instead of customer_id
         $customers = $query->leftJoin('orders', 'customers.id', '=', 'orders.user_id')
             ->select(
                 'customers.*',
