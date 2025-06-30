@@ -83,29 +83,6 @@
         });
     }
 
-    
-// Xử lý thanh toán
-FE.checkout = () => {
-    $('#checkout-form').submit(function(e) {
-        let paymentMethod = $('input[name="payment_method"]:checked').val();
-        
-        if(paymentMethod === 'vnpay' || paymentMethod === 'momo') {
-            e.preventDefault();
-            let formData = $(this).serialize();
-            
-            $.ajax({
-                url: '/checkout/payment-url',
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    if(response.success) {
-                        window.location.href = response.payment_url;
-                    }
-                }
-            });
-        }
-    });
-}
 
     // Helper functions
     function updateCartCount(count) {
@@ -154,6 +131,5 @@ FE.checkout = () => {
     $document.ready(function(){
         FE.cart();
         FE.review();
-        FE.checkout();
     });
 })(jQuery);

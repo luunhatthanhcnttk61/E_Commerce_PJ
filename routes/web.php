@@ -180,7 +180,9 @@ Route::name('client.')->group(function () {
             Route::get('/failed/{order}', [CheckoutController::class, 'failed'])->name('failed');
             Route::get('/callback', [CheckoutController::class, 'callback'])->name('callback');
             Route::get('/vnpay/{order}', [CheckoutController::class, 'vnpay'])->name('vnpay');
+            Route::post('/vnpay/return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
             Route::get('/momo/{order}', [CheckoutController::class, 'momo'])->name('momo');
+            Route::post('/momo/return', [CheckoutController::class, 'momoReturn'])->name('momo.return');
         });
 
         // Account Routes
