@@ -66,7 +66,8 @@ class CheckoutController extends Controller
                 'total_amount'     => $total,
                 'payment_method'   => $request->payment_method,
                 'payment_status'   => 'unpaid',
-                'order_status'     => 'pending'
+                'order_status'     => 'pending',
+                'is_paid'          => false,
             ]);
 
             foreach ($cart as $item) {
@@ -84,7 +85,7 @@ class CheckoutController extends Controller
             if ($request->payment_method == 'cod') {
                 // Xóa giỏ hàng
                 Cart::where('user_id', Auth::id())->delete();
-                $order->update(['payment_status' => 'paid', 'order_status' => 'success']);
+                $order->update(['payment_status' => 'paid', 'order_status' => 'success', 'is_paid' => true]);
                 return redirect()->route('client.checkout.success', $order->id)
                                 ->with('success', 'Đặt hàng thành công!');
             }
@@ -142,19 +143,16 @@ class CheckoutController extends Controller
         ];
 
         ksort($inputData);
-        $query = "";
-        $i = 0;
-        $hashdata = "";
+        $hashdataArr = [];
         foreach ($inputData as $key => $value) {
-            if ($i == 1) $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
-            else $hashdata .= urlencode($key) . "=" . urlencode($value);
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
-            $i++;
+            $hashdataArr[] = urlencode($key) . "=" . urlencode($value);
         }
+        $hashdata = implode('&', $hashdataArr);
+        $query = implode('&', $hashdataArr);
 
         $vnp_Url = $vnp_Url . "?" . $query;
         $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
-        $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+        $vnp_Url .= '&vnp_SecureHash=' . $vnpSecureHash;
 
         return redirect($vnp_Url);
     }
@@ -178,13 +176,13 @@ class CheckoutController extends Controller
         $order = Order::find($orderId);
 
         if ($secureHash === $vnp_SecureHash && $request->vnp_ResponseCode == '00' && $order) {
-            $order->update(['payment_status' => 'paid', 'order_status' => 'success']);
+            $order->update(['payment_status' => 'paid', 'order_status' => 'success', 'is_paid' => true]);
             Cart::where('user_id', $order->user_id)->delete();
             return redirect()->route('client.checkout.success', $orderId)
                 ->with('success', 'Thanh toán VNPAY thành công!');
         }
 
-        return redirect()->route('client.cart.index')->with('error', 'Thanh toán thất bại!');
+        return redirect()->route('client.checkout.failed')->with('error', 'Thanh toán thất bại!');
     }
 
     public function momo($orderId)
@@ -227,6 +225,8 @@ class CheckoutController extends Controller
         $result = $this->execPostRequest($endpoint, json_encode($data));
         $jsonResult = json_decode($result, true);
 
+        dd($jsonResult);
+        
         return redirect($jsonResult['payUrl']);
     }
 
@@ -237,13 +237,13 @@ class CheckoutController extends Controller
         $order = Order::find($realOrderId);
 
         if ($request->resultCode == 0 && $order) {
-            $order->update(['payment_status' => 'paid', 'order_status' => 'success']);
+            $order->update(['payment_status' => 'paid', 'order_status' => 'success', 'is_paid' => true]);
             Cart::where('user_id', $order->user_id)->delete();
             return redirect()->route('client.checkout.success', $orderId)
                 ->with('success', 'Thanh toán MoMo thành công!');
         }
 
-        return redirect()->route('client.cart.index')->with('error', 'Thanh toán MoMo thất bại!');
+        return redirect()->route('client.checkout.failed')->with('error', 'Thanh toán MoMo thất bại!');
     }
 
     public function execPostRequest($url, $data)

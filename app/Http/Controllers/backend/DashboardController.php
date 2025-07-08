@@ -14,11 +14,31 @@ class DashboardController extends Controller
 
     public function index(){
 
+        $totalOrders = \App\Models\Order::where('is_paid', true)->count();
+        $totalRevenue = \App\Models\Order::where('is_paid', true)->sum('total_amount');
+        $totalCustomers = \App\Models\Customer::count();
+
+        $ordersByMonth = \App\Models\Order::selectRaw('MONTH(created_at) as month, SUM(total_amount) as total')
+            ->where('is_paid', true)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $latestOrders = \App\Models\Order::orderBy('created_at', 'desc')->take(5)->get();
+        $lowStockProducts = \App\Models\Product::where('inventory', '<', 5)->get();
+
         $config = $this->config();
         $template = 'backend.dashboard.home.index';
         return view('backend.dashboard.layout', compact(
             'template',
             'config',
+            'totalOrders',
+            'totalRevenue',
+            'totalCustomers',
+            'ordersByMonth',
+            'latestOrders',
+            'lowStockProducts'
         ));
     }
 

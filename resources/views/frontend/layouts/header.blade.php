@@ -35,7 +35,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ route('client.home') }}">
-                <img src="{{ asset('frontend/images/logo.png') }}" alt="Logo" height="50">
+                <img src="{{ asset('/uploads/logo/logo1.jpg') }}" alt="Logo" height="50">
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
