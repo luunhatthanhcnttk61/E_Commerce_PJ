@@ -26,8 +26,46 @@ class FrontendCategoryController extends Controller
             abort(404);
         }
 
-        $products = $this->productService->getProductsByCategory($category->id);
-        
+        $categoryIds = [$category->id];
+        if ($category->children && count($category->children)) {
+            foreach ($category->children as $child) {
+                $categoryIds[] = $child->id;
+            }
+        }
+
+        $products = $this->productService->getProductsByCategories($categoryIds);
+
+        return view('frontend.category.show', compact('category', 'products'));
+    }
+
+    public function showPrice($slug)
+    {
+        $category = $this->categoryService->findBySlug($slug);
+        if(!$category) {
+            abort(404);
+        }
+
+        $categoryIds = [$category->id];
+        if ($category->children && count($category->children)) {
+            foreach ($category->children as $child) {
+                $categoryIds[] = $child->id;
+            }
+        }
+
+        $priceFrom = request('price_from');
+        $priceTo = request('price_to');
+
+        $query = \App\Models\Product::whereIn('category_id', $categoryIds);
+
+        if ($priceFrom) {
+            $query->where('price', '>=', $priceFrom);
+        }
+        if ($priceTo) {
+            $query->where('price', '<=', $priceTo);
+        }
+
+        $products = $query->paginate(12); 
+
         return view('frontend.category.show', compact('category', 'products'));
     }
 

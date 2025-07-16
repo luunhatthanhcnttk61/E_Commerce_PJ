@@ -27,6 +27,24 @@ class FrontendProductController extends Controller
         return view('frontend.product.index', compact('products', 'categories'));
     }
 
+    public function search(\Illuminate\Http\Request $request)
+    {
+        $query = \App\Models\Product::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        $products = $query->paginate(12);
+        $categories = $this->categoryService->getAllCategories();
+
+        return view('frontend.product.index', compact('products', 'categories'));
+    }
+
     public function show($id)
     {
         $product = $this->productService->findById($id);

@@ -96,10 +96,18 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     public function getAllActive()
-{
-    return $this->model
-        ->where('status', 1)
-        ->latest()
-        ->paginate(12);
-}
+    {
+        return $this->model
+            ->where('status', 1)
+            ->latest()
+            ->paginate(12);
+    }
+    
+    public function getProductsByCategories(array $categoryIds)
+    {
+        return $this->model
+            ->whereIn('category_id', $categoryIds)
+            ->where('status', 1)
+            ->paginate(12);
+    }
 }

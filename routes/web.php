@@ -143,6 +143,7 @@ Route::name('client.')->group(function () {
     Route::prefix('product')->name('product.')->group(function() {
         Route::get('/', [FrontendProductController::class, 'index'])->name('index');
         //Route::get('/category/{category_id}', [FrontendProductController::class, 'byCategory'])->name('byCategory');
+        Route::get('/search', [FrontendProductController::class, 'search'])->name('search');
         Route::get('/{id}', [FrontendProductController::class, 'show'])->name('show');
     });
 
@@ -157,6 +158,7 @@ Route::name('client.')->group(function () {
     // Category Routes
     Route::prefix('category')->name('category.')->group(function() {
         Route::get('/{slug}', [FrontendCategoryController::class, 'show'])->name('show');
+        Route::get('/{slug}/price', [FrontendCategoryController::class, 'showPrice'])->name('show.price');
     });
 
     // Review Routes

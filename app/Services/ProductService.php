@@ -65,7 +65,11 @@ class ProductService implements ProductServiceInterface
     }
 
     public function getAllProducts()
-{
-    return $this->productRepository->getAllActive();
-}
+    {
+        return $this->productRepository->getAllActive();
+    }
+    public function getProductsByCategories(array $categoryIds)
+    {
+        return $this->productRepository->getProductsByCategories($categoryIds);
+    }
 }

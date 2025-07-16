@@ -69,7 +69,7 @@
                     </li>
                 </ul>
 
-                <form class="d-flex me-3" action="{{ route('client.product.index') }}" method="GET">
+                <form class="d-flex me-3" action="{{ route('client.product.search') }}" method="GET">
                     <input class="form-control me-2" type="search" name="search" placeholder="Tìm kiếm...">
                     <button class="btn btn-outline-primary" type="submit">
                         <i class="fas fa-search"></i>

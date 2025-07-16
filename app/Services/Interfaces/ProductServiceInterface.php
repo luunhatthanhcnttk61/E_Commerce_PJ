@@ -16,4 +16,5 @@ interface ProductServiceInterface
     public function search($keyword);
     public function getRelatedProducts($productId, $limit = 4);
     public function getAllProducts();
+    public function getProductsByCategories(array $categoryIds);
 }

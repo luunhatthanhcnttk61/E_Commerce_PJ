@@ -60,11 +60,22 @@
                         <label>Danh mục <span class="text-danger">*</span></label>
                         <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
                             <option value="">Chọn danh mục</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}" 
-                                    {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
+                            @foreach($categories as $parent)
+                                @if($parent->children->count())
+                                    <optgroup label="{{ $parent->name }}">
+                                        @foreach($parent->children as $child)
+                                            <option value="{{ $child->id }}"
+                                                {{ old('category_id', $product->category_id ?? '') == $child->id ? 'selected' : '' }}>
+                                                {{ $child->name }}
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+                                @else
+                                    <option value="{{ $parent->id }}"
+                                        {{ old('category_id', $product->category_id ?? '') == $parent->id ? 'selected' : '' }}>
+                                        {{ $parent->name }}
+                                    </option>
+                                @endif
                             @endforeach
                         </select>
                         @error('category_id')

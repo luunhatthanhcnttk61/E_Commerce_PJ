@@ -121,7 +121,7 @@
         <div class="col-md-4 mb-4">
             <div class="category-card">
                 <a href="{{ route('client.category.show', $category->slug) }}">
-                    <img src="{{ $category->image }}" alt="{{ $category->name }}">
+                    <img src="{{asset('uploads/category/' . $category->name. '.jpg') }}" alt="{{ $category->name }}">
                     <div class="category-overlay">
                         <h3>{{ $category->name }}</h3>
                         <p>{{ $category->products_count }} sản phẩm</p>

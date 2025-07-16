@@ -16,4 +16,5 @@ interface ProductRepositoryInterface
     public function search($keyword);
     public function getRelatedProducts($productId, $limit);
     public function getAllActive();
+    public function getProductsByCategories(array $categoryIds);
 }

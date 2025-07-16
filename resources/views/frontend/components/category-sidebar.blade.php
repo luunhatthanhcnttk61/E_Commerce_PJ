@@ -2,10 +2,16 @@
     <h4 class="sidebar-title">Danh mục sản phẩm</h4>
     <ul class="category-list">
         @foreach($categories as $cat)
+            @php
+                $total = $cat->products->count();
+                foreach($cat->children as $child) {
+                    $total += $child->products->count();
+                }
+            @endphp
             <li class="category-item {{ isset($category) && $cat->id == $category->id ? 'active' : '' }}">
                 <a href="{{ route('client.category.show', $cat->slug) }}" class="category-link">
                     {{ $cat->name }}
-                    <span class="product-count">({{ $cat->products_count }})</span>
+                    <span class="product-count">({{ $total }})</span>
                 </a>
                 @if($cat->children && count($cat->children) > 0)
                     <ul class="subcategory-list">
@@ -13,7 +19,7 @@
                             <li class="category-item {{ isset($category) && $child->id == $category->id ? 'active' : '' }}">
                                 <a href="{{ route('client.category.show', $child->slug) }}" class="category-link">
                                     {{ $child->name }}
-                                    <span class="product-count">({{ $child->products_count }})</span>
+                                    <span class="product-count">({{ $child->products->count() }})</span>
                                 </a>
                             </li>
                         @endforeach
@@ -22,11 +28,10 @@
             </li>
         @endforeach
     </ul>
-
     @if(isset($category))
     <div class="price-filter mt-4">
         <h4 class="sidebar-title">Lọc theo giá</h4>
-        <form action="{{ route('client.category.show', $category->slug) }}" method="GET">
+        <form action="{{ route('client.category.show.price', $category->slug) }}" method="GET">
             <div class="price-range">
                 <input type="number" name="price_from" class="form-control mb-2" placeholder="Giá từ" 
                     value="{{ request('price_from') }}">
